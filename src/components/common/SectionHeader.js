@@ -5,9 +5,9 @@ import Typography from '@material-ui/core/Typography';
 class SectionHeader extends PureComponent {
     render() {
         return (
-            <div style={{textAlign: "left"}}>
+            <div style={{ textAlign: 'left' }}>
                     <Typography variant="h5" align="left">
-                        <b>Popular Games Right Now</b>
+                        <b>{this.props.title}</b>
                     </Typography>
                     <div
                     style={{
@@ -26,7 +26,7 @@ class SectionHeader extends PureComponent {
 
 
 SectionHeader.propTypes = {
-    classes: PropTypes.object.isRequired
+
 };
 
 

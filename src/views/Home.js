@@ -3,8 +3,10 @@ import PropTypes from 'prop-types';
 import { Parallax, Background } from 'react-parallax';
 import { withStyles } from '@material-ui/core/styles';
 
+import Typography from '@material-ui/core/Typography';
 import SectionHeader from '../components/common/SectionHeader';
-import Grid from '@material-ui/core/Grid';
+import GridGallery from '../components/gallery/GridGallery';
+import Carousel from '../components/gallery/Carousel';
 
 const styles = theme => ({
 	root: {
@@ -25,48 +27,32 @@ const Home = (props) => {
 	const { classes } = props;
 
 	return (
-		<div style={{height: '1500px'}}>
+		<div>
 			<Parallax
-				blur={.5}
+				blur={.8}
 				bgImage={require('../images/battlefield-5-banner.jpg')}
 				bgImageAlt="battlefield 5"
 				strength={-200}
 			>
-				{/* Welcome! 
-				Find the right game for the right price here, at Warp Zone. */}
-				<div style={{ height: '500px' }} />
+				<div style={{ display: 'flex', flexDirection: 'column', height: '500px', border: '1px solid black', justifyContent: 'center' }}>
+					<Typography variant="h4" align="center" style={{ textShadow: '5px 5px 5px black', color: 'white' }}>
+						<b>Welcome!</b><br />
+						<b>Find the right game for the right price here, at Warp Zone.</b>
+					</Typography>
+				</div>
 			</Parallax>
 			
-			<div style={{height: '200px'}} />
+			<div style={{ height: '100px' }} />
+
 			<div className={classes.root}>
-			<SectionHeader/>
-				<Grid container spacing={16} style={{marginBottom:'8px'}}>
-					<Grid item xs={12} sm={4} md={4} style={{height: '200px'}}>
-						<div style={{height: '100%', width: '100%', background: 'blue'}}>1</div>
-					</Grid>
-					<Grid item xs={12} sm={4} md={4} style={{height: '200px'}}>
-						<div style={{height: '100%', width: '100%', background: 'blue'}}>2</div>
-					</Grid>
-					<Grid item xs={12} sm={4} md={4} style={{height: '200px'}}>
-						<div style={{height: '100%', width: '100%', background: 'blue'}}>3</div>
-					</Grid>
-				</Grid>
-				<Grid container spacing={16}>
-					<Grid item xs={12} sm={12} md={8} style={{height: '400px'}}>
-						<div style={{height: '100%', width: '100%', background: 'blue'}}>4</div>
-					</Grid>
-					<Grid item xs={12} sm={12} md={4} style={{height: '200px'}}>
-						<Grid container spacing={16}>
-							<Grid item xs={12} sm={6} md={12} style={{height: '200px'}}>
-								<div style={{height: '100%', width: '100%', background: 'blue'}}>5</div>
-							</Grid>
-							<Grid item xs={12} sm={6} md={12} style={{height: '200px'}}>
-								<div style={{height: '100%', width: '100%', background: 'blue'}}>6</div>
-							</Grid>
-						</Grid>
-					</Grid>
-				</Grid>
+			<SectionHeader title="Popular Games Right Now" />
+			<GridGallery />
 			</div>
+			<div style={{ height: '100px' }} />
+
+			<Carousel />
+
+			<div style={{ height: '100px' }} />
 		</div>
 	);
 }
