@@ -8,7 +8,7 @@ class Footer extends PureComponent {
     render() {
         return (
             <div style={{ background: '#212121' }}>
-                <Grid container spacing={16} style={{ margin:'8px', height: '100px' }}>
+                <Grid container style={{ height: '100px' }}>
 					<Grid item xs={12} sm={4} md={4}>
 						<span style={{ color: 'white' }}>Github</span>
 					</Grid>
