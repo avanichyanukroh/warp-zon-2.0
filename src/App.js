@@ -9,8 +9,6 @@ import UserProfile from './views/UserProfile';
 import Footer from './components/layout/Footer';
 import CssBaseline from '@material-ui/core/CssBaseline';
 
-import './App.css';
-
 const App = () => {
 	return (
 		<Router>

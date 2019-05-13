@@ -22,7 +22,7 @@ class GridGallery extends PureComponent {
 					<Grid item xs={12} sm={12} md={8} style={{ height: '400px' }}>
 						<div style={{ height: '100%', width: '100%', background: 'blue' }}>4</div>
 					</Grid>
-					<Grid item xs={12} sm={12} md={4} style={{ height: '200px' }}>
+					<Grid item xs={12} sm={12} md={4}>
 						<Grid container spacing={16}>
 							<Grid item xs={12} sm={6} md={12} style={{ height: '200px' }}>
 								<div style={{ height: '100%', width: '100%', background: 'blue' }}>5</div>
