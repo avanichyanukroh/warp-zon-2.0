@@ -1,5 +1,5 @@
 import React, { PureComponent } from 'react';
-import PropTypes from 'prop-types';
+// import PropTypes from 'prop-types';
 
 import { Carousel as ResponsiveCarousel } from 'react-responsive-carousel';
 
@@ -31,7 +31,7 @@ class Carousel extends PureComponent {
 					</p>
 				</div>
 				<div className="my-slide content">
-					<img src="/assets/meme.png" />
+					<img src="/assets/meme.png" alt="example slide" />
 				</div>
 				<div className="my-slide content">
 					<p>
@@ -86,10 +86,10 @@ class Carousel extends PureComponent {
 					</ul>
 				</div>
 				<div className="my-slide content">
-					<iframe width="560" height="315" src="https://www.youtube.com/embed/n0F6hSpxaFc" />
+					<iframe width="560" height="315" src="https://www.youtube.com/embed/n0F6hSpxaFc" title="sample video" />
 				</div>
 				<div className="my-slide content">
-					<iframe src="https://player.vimeo.com/video/105955605" width="640" height="360" />
+					<iframe src="https://player.vimeo.com/video/105955605" width="640" height="360" title="sample video" />
 				</div>
 				<div className="my-slide primary">
 					<h1>
