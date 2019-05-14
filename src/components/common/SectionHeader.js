@@ -2,6 +2,16 @@ import React, { PureComponent } from 'react';
 import PropTypes from 'prop-types';
 import Typography from '@material-ui/core/Typography';
 
+const styles = {
+    underline: {
+        background: 'linear-gradient(to right, #009fff, #ec2f4b)',
+        height: '3px',
+        width: '85px',
+        display: 'inline-block',
+        marginBottom: '8px',
+        borderRadius: '15px'
+    }
+}
 class SectionHeader extends PureComponent {
     render() {
         return (
@@ -10,14 +20,7 @@ class SectionHeader extends PureComponent {
                         <b>{this.props.title}</b>
                     </Typography>
                     <div
-                    style={{
-                        background: 'linear-gradient(to right, #009fff, #ec2f4b)',
-                        height: '3px',
-                        width: '85px',
-                        display: 'inline-block',
-                        marginBottom: '8px',
-                        borderRadius: '15px'
-                    }}
+                    style={styles.underline}
                 />
             </div>
         );
@@ -26,7 +29,7 @@ class SectionHeader extends PureComponent {
 
 
 SectionHeader.propTypes = {
-
+    title: PropTypes.string.isRequired
 };
 
 
