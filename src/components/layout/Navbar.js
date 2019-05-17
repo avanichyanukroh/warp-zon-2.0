@@ -20,7 +20,7 @@ import MoreIcon from '@material-ui/icons/MoreVert';
 
 const styles = theme => ({
 	root: {
-		width: '100%',
+        width: '100%',
 	},
 	grow: {
 		flexGrow: 1,
@@ -165,7 +165,7 @@ class Navbar extends React.Component {
 
 		return (
 			<div className={classes.root}>
-				<AppBar position="static">
+				<AppBar position="fixed">
 					<Toolbar variant="dense">
 						<IconButton className={classes.menuButton} color="inherit" aria-label="Open drawer">
 							<MenuIcon />

@@ -27,9 +27,11 @@ class Home extends Component {
                     <GridGallery items={popularGames} />
                 </BoxContainer>
                 <Spacer />
+                <BoxContainer>
+                    <SectionHeader title="New Releases" />
+                </BoxContainer>
                 <Carousel items={popularGames} />
                 <Spacer />
-                
             </div>
         );
     }
