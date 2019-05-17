@@ -62,7 +62,7 @@ export const getGameProfile = (gameId) => dispatch => {
         },
         data: `
             fields
-                *;
+                *, screenshots.*, genres.name, platforms.abbreviation
             where
                 id=${gameId};`
     })
@@ -84,7 +84,7 @@ export const getGameProfiles = (gameIds) => dispatch => {
         },
         data: `
             fields
-                *;
+                *, screenshots.*, genres.name, platforms.abbreviation
             where
                 id=(${gameIds});`
     })

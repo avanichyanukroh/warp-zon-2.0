@@ -20,8 +20,8 @@ class SectionHeader extends PureComponent {
                         <b>{this.props.title}</b>
                     </Typography>
                     <div
-                    style={styles.underline}
-                />
+                        style={styles.underline}
+                    />
             </div>
         );
     }
