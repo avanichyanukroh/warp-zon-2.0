@@ -87,10 +87,14 @@ const mapStateToProps = state => ({
         ],
         "name": "Mortal Kombat 11",
         "platforms": [
-            6,
-            48,
-            49,
-            130
+            {
+                "id": 6,
+                "abbreviation": "PC"
+            },
+            {
+                "id": 7,
+                "abbreviation": "PS4"
+            }
         ],
         "player_perspectives": [
             4
