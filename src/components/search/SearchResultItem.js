@@ -15,7 +15,7 @@ const styles = {
         objectFit: 'cover',
         width: '100%',
         height: '100%',
-        borderRadius: '10px',
+        borderRadius: '4px',
         boxShadow: '1px 1px 2px lightgray'
     },
     gameDescriptionContainer: {
@@ -25,7 +25,7 @@ const styles = {
     },
     platform: {
         border: '1px solid gray',
-        borderRadius: '3px',
+        borderRadius: '4px',
         padding: '2px 6px',
         marginRight: '5px',
         fontSize: '12px'

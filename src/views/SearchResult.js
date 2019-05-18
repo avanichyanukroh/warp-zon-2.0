@@ -31,13 +31,13 @@ const styles = {
     },
     gameResultsContainer: {
         background: 'white',
-        borderRadius: '10px',
+        borderRadius: '4px',
         padding: '8px',
         boxShadow: '0 0 3px gray'
     },
     filterContainer: {
         background: 'white',
-        borderRadius: '10px',
+        borderRadius: '4px',
         padding: '8px',
         boxShadow: '0 0 3px gray'
     }
