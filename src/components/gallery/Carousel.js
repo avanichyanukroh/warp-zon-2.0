@@ -59,6 +59,13 @@ const styles = {
         left: '-40px',
         width: '100%',
         height: '100%'
+    },
+    platform: {
+        border: '1px solid white',
+        borderRadius: '3px',
+        padding: '2px 6px',
+        marginRight: '5px',
+        fontSize: '14px'
     }
 }
 class Carousel extends PureComponent {
@@ -87,7 +94,9 @@ class Carousel extends PureComponent {
                                         <Typography variant="h4" style={styles.itemDescriptionText}>
                                             <span style={{ cursor: 'pointer' }}>{item.name}</span>
                                         </Typography>
-                                        <p style={styles.itemDescriptionText}>{item.summary.slice(0, 250)} ...<a href="#"> Read more</a></p>
+                                        <Typography variant="body1" style={styles.itemDescriptionText}>
+                                            {item.summary.slice(0, 250)} ...<a href="#"> Read more</a>
+                                        </Typography>
                                         <p>
                                             <b>Genre: </b>
                                             {item.genres.map((genre, index) => {
@@ -103,12 +112,8 @@ class Carousel extends PureComponent {
                                             <b>Platform: </b>
                                             {item.platforms.map((platform, index) => (
                                                 <span
-                                                    style={{
-                                                        border: '2px solid white',
-                                                        borderRadius: '3px',
-                                                        padding: '3px 5px 3px',
-                                                        marginRight: '5px'
-                                                    }}
+                                                    style={styles.platform}
+                                                    key={index}
                                                 >
                                                     {platform.abbreviation}
                                                 </span>

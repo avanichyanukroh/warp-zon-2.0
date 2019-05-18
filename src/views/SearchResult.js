@@ -1,24 +1,119 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
 
-import Grid from '@material-ui/core/Grid';
-import { Hidden } from '@material-ui/core';
+import { Grid, Hidden, Divider } from '@material-ui/core';
 import BoxContainer from '../components/layout/BoxContainer';
 import backgroundImage from '../images/breath-of-the-wild-wallpaper.jpg';
+import SearchResultItem from '../components/search/SearchResultItem';
+import SortBar from '../components/search/SortBar';
+import Filter from '../components/search/Filter';  
 
+const styles = {
+    backgroundImage: {
+        position: 'absolute',
+        top: '45px',
+        left: 0,
+        zIndex: '-20',
+        width: '100%',
+        backgroundSize: 'cover',
+        backgroundPosition: 'center center'
+    },
+    backgroundImageEffectOverlay: {
+        position: 'absolute',
+        top: '45px',
+        left: 0,
+        zIndex: '-10',
+        height: '56.25vw',
+        width: '100vw',
+        background: 'linear-gradient(rgba(250,250,250, .6), rgba(250,250,250, 1))',
+        backgroundSize: 'cover',
+        backgroundPosition: 'center center'
+    },
+    gameResultsContainer: {
+        background: 'white',
+        borderRadius: '10px',
+        padding: '8px',
+        boxShadow: '0 0 3px gray'
+    },
+    filterContainer: {
+        background: 'white',
+        borderRadius: '10px',
+        padding: '8px',
+        boxShadow: '0 0 3px gray'
+    }
+}
 class SearchResult extends Component {
+    state = {
+        sortBy: null,
+        isAscending: null
+    }
+
+    sortBy = (gameSearchResults) => {
+        console.log('will sort by', this.state.sortBy)
+        if (this.state.sortBy === null) {
+            return gameSearchResults;
+        }
+        else {
+            if (this.state.isAscending) {
+                return gameSearchResults.sort((a, b) => {
+                    return a[this.state.sortBy] - b[this.state.sortBy];
+                })
+            }
+            else {
+                return gameSearchResults.sort((a, b) => {
+                    return b[this.state.sortBy] - a[this.state.sortBy];
+                })
+            }
+        }
+    }
+
+    handleSortBySelection = (propertyName) => {
+        if (this.state.sortBy === propertyName) {
+            this.setState(prevState => ({
+                isAscending: !prevState.isAscending
+            }));
+        }
+        else {
+            this.setState({
+                sortBy: propertyName,
+                isAscending: true
+            });
+        }
+    }
 
     render() {
+        const { gameSearchResults } = this.props;
+        const { sortBy, isAscending } = this.state;
+
         return (
-            <div style={{ minHeight: '100vh' }}>
+            <div style={{ minHeight: '100vh', marginTop: '80px' }}>
                 <BoxContainer>
                     <Grid container spacing={16} style={{ marginBottom:'8px' }}>
-                        <Grid item xs={12} sm={8} md={8} style={{ height: '200px' }}>
-                            <div style={{ height: '100%', width: '100%', background: 'white' }}>1</div>
+                        <Grid item xs={12} sm={8} md={8}>
+                            <div style={styles.gameResultsContainer}>
+                                <SortBar
+                                    propertyNames={['name', 'rating', 'first_release_date']}
+                                    propertyDisplayNames={['TITLE', 'RATING', 'RELEASE DATE']}
+                                    handleSortBySelection={this.handleSortBySelection}
+                                    sortBy={sortBy}
+                                    isAscending={isAscending}
+                                />
+                                <Divider variant="middle" />
+                                <div style={{ padding: '8px' }}>
+                                    {`${gameSearchResults.length} results for "Query Placeholder"`}
+                                </div>
+                                {this.sortBy(gameSearchResults).map((gameSearchResult, index) => (
+                                    <SearchResultItem gameSearchResult={gameSearchResult} key={index} />
+                                ))}
+                            </div>
                         </Grid>
-                        <Hidden only={['xs', 's']}>
-                            <Grid item xs={12} sm={4} md={4} style={{ height: '200px' }}>
-                                <div style={{ height: '100%', width: '100%', background: 'white' }}>2</div>
+                        <Hidden smDown>
+                            <Grid item xs={12} sm={4} md={4}>
+                                <div style={styles.filterContainer}>
+                                    <div style={{ margin: '8px 8px 0px', padding: '8px' }}>Games ({gameSearchResults.length})</div>
+                                    <Divider variant="middle" />
+                                    <Filter />
+                                </div>
                             </Grid>
                         </Hidden>
                     </Grid>
@@ -26,16 +121,9 @@ class SearchResult extends Component {
                 <img
                     src={backgroundImage}
                     alt="breath of the wild background"
-                    style={{
-                        position: "fixed",
-                        top: 0,
-                        left: 0,
-                        zIndex: '-10',
-                        width: '100%',
-                        backgroundSize: 'cover',
-                        backgroundPosition: 'center center'
-                    }}
+                    style={styles.backgroundImage}
                 />
+                <div style={styles.backgroundImageEffectOverlay} />
             </div>
         );
     }
@@ -79,7 +167,16 @@ const mapStateToProps = state => ({
             ],
             "category": 0,
             "collection": 18,
-            "cover": 69599,
+            "cover": {
+                "id": 70935,
+                "alpha_channel": false,
+                "animated": false,
+                "game": 112916,
+                "height": 2606,
+                "image_id": "co1iqf",
+                "url": "//images.igdb.com/igdb/image/upload/t_thumb/co1iqf.jpg",
+                "width": 1955
+            },
             "created_at": 1300060800,
             "dlcs": [
                 9562,
@@ -109,8 +206,27 @@ const mapStateToProps = state => ({
                 31
             ],
             "involved_companies": [
-                8109,
-                8110
+                {
+                    "id": 77358,
+                    "company": {
+                        "id": 48,
+                        "name": "NetherRealm Studios"
+                    }
+                },
+                {
+                    "id": 77359,
+                    "company": {
+                        "id": 2546,
+                        "name": "Shiver Games"
+                    }
+                },
+                {
+                    "id": 77360,
+                    "company": {
+                        "id": 14055,
+                        "name": "Warner Bros. Interactive Entertainment"
+                    }
+                }
             ],
             "keywords": [
                 22,
@@ -434,11 +550,22 @@ const mapStateToProps = state => ({
             ],
             "name": "Assassin's Creed II",
             "platforms": [
-                6,
-                9,
-                12,
-                14,
-                39
+                {
+                    "id": 6,
+                    "abbreviation": "PC"
+                },
+                {
+                    "id": 48,
+                    "abbreviation": "PS4"
+                },
+                {
+                    "id": 49,
+                    "abbreviation": "XONE"
+                },
+                {
+                    "id": 130,
+                    "abbreviation": "switch"
+                }
             ],
             "player_perspectives": [
                 2
@@ -874,7 +1001,16 @@ const mapStateToProps = state => ({
             ],
             "category": 0,
             "collection": 18,
-            "cover": 72181,
+            "cover": {
+                "id": 70935,
+                "alpha_channel": false,
+                "animated": false,
+                "game": 112916,
+                "height": 2606,
+                "image_id": "co1iqf",
+                "url": "//images.igdb.com/igdb/image/upload/t_thumb/co1iqf.jpg",
+                "width": 1955
+            },
             "created_at": 1345334400,
             "dlcs": [
                 8218
@@ -905,13 +1041,27 @@ const mapStateToProps = state => ({
                 31
             ],
             "involved_companies": [
-                9850,
-                9853,
-                46280,
-                46281,
-                63941,
-                63942,
-                63943
+                {
+                    "id": 77358,
+                    "company": {
+                        "id": 48,
+                        "name": "NetherRealm Studios"
+                    }
+                },
+                {
+                    "id": 77359,
+                    "company": {
+                        "id": 2546,
+                        "name": "Shiver Games"
+                    }
+                },
+                {
+                    "id": 77360,
+                    "company": {
+                        "id": 14055,
+                        "name": "Warner Bros. Interactive Entertainment"
+                    }
+                }
             ],
             "keywords": [
                 22,
@@ -983,10 +1133,22 @@ const mapStateToProps = state => ({
             ],
             "name": "Assassin's Creed III",
             "platforms": [
-                6,
-                9,
-                12,
-                41
+                {
+                    "id": 6,
+                    "abbreviation": "PC"
+                },
+                {
+                    "id": 48,
+                    "abbreviation": "PS4"
+                },
+                {
+                    "id": 49,
+                    "abbreviation": "XONE"
+                },
+                {
+                    "id": 130,
+                    "abbreviation": "switch"
+                }
             ],
             "player_perspectives": [
                 2
@@ -1153,7 +1315,16 @@ const mapStateToProps = state => ({
             ],
             "category": 0,
             "collection": 18,
-            "cover": 17083,
+            "cover": {
+                "id": 70935,
+                "alpha_channel": false,
+                "animated": false,
+                "game": 112916,
+                "height": 2606,
+                "image_id": "co1iqf",
+                "url": "//images.igdb.com/igdb/image/upload/t_thumb/co1iqf.jpg",
+                "width": 1955
+            },
             "created_at": 1469232000,
             "external_games": [
                 151904,
@@ -1172,8 +1343,27 @@ const mapStateToProps = state => ({
                 31
             ],
             "involved_companies": [
-                39139,
-                39140
+                {
+                    "id": 77358,
+                    "company": {
+                        "id": 48,
+                        "name": "NetherRealm Studios"
+                    }
+                },
+                {
+                    "id": 77359,
+                    "company": {
+                        "id": 2546,
+                        "name": "Shiver Games"
+                    }
+                },
+                {
+                    "id": 77360,
+                    "company": {
+                        "id": 14055,
+                        "name": "Warner Bros. Interactive Entertainment"
+                    }
+                }
             ],
             "keywords": [
                 22,
@@ -1222,9 +1412,22 @@ const mapStateToProps = state => ({
             ],
             "name": "Assassin's Creed: Altair's Chronicles",
             "platforms": [
-                20,
-                39,
-                74
+                {
+                    "id": 6,
+                    "abbreviation": "PC"
+                },
+                {
+                    "id": 48,
+                    "abbreviation": "PS4"
+                },
+                {
+                    "id": 49,
+                    "abbreviation": "XONE"
+                },
+                {
+                    "id": 130,
+                    "abbreviation": "switch"
+                }
             ],
             "player_perspectives": [
                 2,
@@ -1365,7 +1568,16 @@ const mapStateToProps = state => ({
             ],
             "category": 0,
             "collection": 18,
-            "cover": 43888,
+            "cover": {
+                "id": 70935,
+                "alpha_channel": false,
+                "animated": false,
+                "game": 112916,
+                "height": 2606,
+                "image_id": "co1iqf",
+                "url": "//images.igdb.com/igdb/image/upload/t_thumb/co1iqf.jpg",
+                "width": 1955
+            },
             "created_at": 1300060800,
             "external_games": [
                 14671,
@@ -1391,8 +1603,27 @@ const mapStateToProps = state => ({
                 31
             ],
             "involved_companies": [
-                18460,
-                18461
+                {
+                    "id": 77358,
+                    "company": {
+                        "id": 48,
+                        "name": "NetherRealm Studios"
+                    }
+                },
+                {
+                    "id": 77359,
+                    "company": {
+                        "id": 2546,
+                        "name": "Shiver Games"
+                    }
+                },
+                {
+                    "id": 77360,
+                    "company": {
+                        "id": 14055,
+                        "name": "Warner Bros. Interactive Entertainment"
+                    }
+                }
             ],
             "keywords": [
                 22,
@@ -1466,9 +1697,22 @@ const mapStateToProps = state => ({
             ],
             "name": "Assassin's Creed",
             "platforms": [
-                6,
-                9,
-                12
+                {
+                    "id": 6,
+                    "abbreviation": "PC"
+                },
+                {
+                    "id": 48,
+                    "abbreviation": "PS4"
+                },
+                {
+                    "id": 49,
+                    "abbreviation": "XONE"
+                },
+                {
+                    "id": 130,
+                    "abbreviation": "switch"
+                }
             ],
             "player_perspectives": [
                 2
@@ -1647,7 +1891,16 @@ const mapStateToProps = state => ({
             ],
             "category": 0,
             "collection": 18,
-            "cover": 45176,
+            "cover": {
+                "id": 70935,
+                "alpha_channel": false,
+                "animated": false,
+                "game": 112916,
+                "height": 2606,
+                "image_id": "co1iqf",
+                "url": "//images.igdb.com/igdb/image/upload/t_thumb/co1iqf.jpg",
+                "width": 1955
+            },
             "created_at": 1395360000,
             "dlcs": [
                 8219
@@ -1677,15 +1930,27 @@ const mapStateToProps = state => ({
             ],
             "hypes": 26,
             "involved_companies": [
-                16225,
-                17393,
-                63926,
-                63927,
-                63928,
-                63929,
-                63930,
-                63931,
-                63932
+                {
+                    "id": 77358,
+                    "company": {
+                        "id": 48,
+                        "name": "NetherRealm Studios"
+                    }
+                },
+                {
+                    "id": 77359,
+                    "company": {
+                        "id": 2546,
+                        "name": "Shiver Games"
+                    }
+                },
+                {
+                    "id": 77360,
+                    "company": {
+                        "id": 14055,
+                        "name": "Warner Bros. Interactive Entertainment"
+                    }
+                }
             ],
             "keywords": [
                 22,
@@ -1828,9 +2093,22 @@ const mapStateToProps = state => ({
             ],
             "name": "Assassin's Creed: Unity",
             "platforms": [
-                6,
-                48,
-                49
+                {
+                    "id": 6,
+                    "abbreviation": "PC"
+                },
+                {
+                    "id": 48,
+                    "abbreviation": "PS4"
+                },
+                {
+                    "id": 49,
+                    "abbreviation": "XONE"
+                },
+                {
+                    "id": 130,
+                    "abbreviation": "switch"
+                }
             ],
             "player_perspectives": [
                 2
@@ -2079,7 +2357,16 @@ const mapStateToProps = state => ({
             ],
             "category": 0,
             "collection": 18,
-            "cover": 114,
+            "cover": {
+                "id": 70935,
+                "alpha_channel": false,
+                "animated": false,
+                "game": 112916,
+                "height": 2606,
+                "image_id": "co1iqf",
+                "url": "//images.igdb.com/igdb/image/upload/t_thumb/co1iqf.jpg",
+                "width": 1955
+            },
             "created_at": 1300060800,
             "dlcs": [
                 8216,
@@ -2109,12 +2396,27 @@ const mapStateToProps = state => ({
                 31
             ],
             "involved_companies": [
-                3668,
-                3670,
-                63944,
-                63945,
-                63946,
-                63947
+                {
+                    "id": 77358,
+                    "company": {
+                        "id": 48,
+                        "name": "NetherRealm Studios"
+                    }
+                },
+                {
+                    "id": 77359,
+                    "company": {
+                        "id": 2546,
+                        "name": "Shiver Games"
+                    }
+                },
+                {
+                    "id": 77360,
+                    "company": {
+                        "id": 14055,
+                        "name": "Warner Bros. Interactive Entertainment"
+                    }
+                }
             ],
             "keywords": [
                 22,
@@ -2270,9 +2572,22 @@ const mapStateToProps = state => ({
             ],
             "name": "Assassin's Creed: Brotherhood",
             "platforms": [
-                6,
-                9,
-                12
+                {
+                    "id": 6,
+                    "abbreviation": "PC"
+                },
+                {
+                    "id": 48,
+                    "abbreviation": "PS4"
+                },
+                {
+                    "id": 49,
+                    "abbreviation": "XONE"
+                },
+                {
+                    "id": 130,
+                    "abbreviation": "switch"
+                }
             ],
             "player_perspectives": [
                 2
@@ -2512,7 +2827,16 @@ const mapStateToProps = state => ({
             ],
             "category": 0,
             "collection": 18,
-            "cover": 29869,
+            "cover": {
+                "id": 70935,
+                "alpha_channel": false,
+                "animated": false,
+                "game": 112916,
+                "height": 2606,
+                "image_id": "co1iqf",
+                "url": "//images.igdb.com/igdb/image/upload/t_thumb/co1iqf.jpg",
+                "width": 1955
+            },
             "created_at": 1505174400,
             "external_games": [
                 126761
@@ -2529,7 +2853,27 @@ const mapStateToProps = state => ({
                 12
             ],
             "involved_companies": [
-                75943
+                {
+                    "id": 77358,
+                    "company": {
+                        "id": 48,
+                        "name": "NetherRealm Studios"
+                    }
+                },
+                {
+                    "id": 77359,
+                    "company": {
+                        "id": 2546,
+                        "name": "Shiver Games"
+                    }
+                },
+                {
+                    "id": 77360,
+                    "company": {
+                        "id": 14055,
+                        "name": "Warner Bros. Interactive Entertainment"
+                    }
+                }
             ],
             "keywords": [
                 22,
@@ -2554,7 +2898,22 @@ const mapStateToProps = state => ({
             ],
             "name": "Assassin's Creed: Project Legacy",
             "platforms": [
-                82
+                {
+                    "id": 6,
+                    "abbreviation": "PC"
+                },
+                {
+                    "id": 48,
+                    "abbreviation": "PS4"
+                },
+                {
+                    "id": 49,
+                    "abbreviation": "XONE"
+                },
+                {
+                    "id": 130,
+                    "abbreviation": "switch"
+                }
             ],
             "player_perspectives": [
                 2
@@ -2655,7 +3014,16 @@ const mapStateToProps = state => ({
             ],
             "category": 0,
             "collection": 18,
-            "cover": 72182,
+            "cover": {
+                "id": 70935,
+                "alpha_channel": false,
+                "animated": false,
+                "game": 112916,
+                "height": 2606,
+                "image_id": "co1iqf",
+                "url": "//images.igdb.com/igdb/image/upload/t_thumb/co1iqf.jpg",
+                "width": 1955
+            },
             "created_at": 1362528000,
             "dlcs": [
                 26084,
@@ -2699,15 +3067,27 @@ const mapStateToProps = state => ({
             ],
             "hypes": 13,
             "involved_companies": [
-                18517,
-                18518,
-                63910,
-                63911,
-                63912,
-                63913,
-                63914,
-                63915,
-                63939
+                {
+                    "id": 77358,
+                    "company": {
+                        "id": 48,
+                        "name": "NetherRealm Studios"
+                    }
+                },
+                {
+                    "id": 77359,
+                    "company": {
+                        "id": 2546,
+                        "name": "Shiver Games"
+                    }
+                },
+                {
+                    "id": 77360,
+                    "company": {
+                        "id": 14055,
+                        "name": "Warner Bros. Interactive Entertainment"
+                    }
+                }
             ],
             "keywords": [
                 4,
@@ -3000,12 +3380,22 @@ const mapStateToProps = state => ({
             ],
             "name": "Assassin's Creed IV: Black Flag",
             "platforms": [
-                6,
-                9,
-                12,
-                41,
-                48,
-                49
+                {
+                    "id": 6,
+                    "abbreviation": "PC"
+                },
+                {
+                    "id": 48,
+                    "abbreviation": "PS4"
+                },
+                {
+                    "id": 49,
+                    "abbreviation": "XONE"
+                },
+                {
+                    "id": 130,
+                    "abbreviation": "switch"
+                }
             ],
             "player_perspectives": [
                 2
@@ -3423,7 +3813,16 @@ const mapStateToProps = state => ({
             ],
             "category": 0,
             "collection": 18,
-            "cover": 45165,
+            "cover": {
+                "id": 70935,
+                "alpha_channel": false,
+                "animated": false,
+                "game": 112916,
+                "height": 2606,
+                "image_id": "co1iqf",
+                "url": "//images.igdb.com/igdb/image/upload/t_thumb/co1iqf.jpg",
+                "width": 1955
+            },
             "created_at": 1418083200,
             "dlcs": [
                 15169,
@@ -3454,17 +3853,27 @@ const mapStateToProps = state => ({
             ],
             "hypes": 20,
             "involved_companies": [
-                20126,
-                20127,
-                63917,
-                63918,
-                63919,
-                63920,
-                63921,
-                63922,
-                63923,
-                63924,
-                63925
+                {
+                    "id": 77358,
+                    "company": {
+                        "id": 48,
+                        "name": "NetherRealm Studios"
+                    }
+                },
+                {
+                    "id": 77359,
+                    "company": {
+                        "id": 2546,
+                        "name": "Shiver Games"
+                    }
+                },
+                {
+                    "id": 77360,
+                    "company": {
+                        "id": 14055,
+                        "name": "Warner Bros. Interactive Entertainment"
+                    }
+                }
             ],
             "keywords": [
                 22,
@@ -3518,9 +3927,22 @@ const mapStateToProps = state => ({
             ],
             "name": "Assassin's Creed: Syndicate",
             "platforms": [
-                6,
-                48,
-                49
+                {
+                    "id": 6,
+                    "abbreviation": "PC"
+                },
+                {
+                    "id": 48,
+                    "abbreviation": "PS4"
+                },
+                {
+                    "id": 49,
+                    "abbreviation": "XONE"
+                },
+                {
+                    "id": 130,
+                    "abbreviation": "switch"
+                }
             ],
             "player_perspectives": [
                 2
@@ -3665,7 +4087,16 @@ const mapStateToProps = state => ({
             ],
             "category": 0,
             "collection": 18,
-            "cover": 29858,
+            "cover": {
+                "id": 70935,
+                "alpha_channel": false,
+                "animated": false,
+                "game": 112916,
+                "height": 2606,
+                "image_id": "co1iqf",
+                "url": "//images.igdb.com/igdb/image/upload/t_thumb/co1iqf.jpg",
+                "width": 1955
+            },
             "created_at": 1494374400,
             "expansions": [
                 17783,
@@ -3695,17 +4126,27 @@ const mapStateToProps = state => ({
             ],
             "hypes": 88,
             "involved_companies": [
-                50707,
-                50747,
-                63901,
-                63902,
-                63904,
-                63905,
-                63906,
-                63907,
-                63908,
-                63909,
-                63940
+                {
+                    "id": 77358,
+                    "company": {
+                        "id": 48,
+                        "name": "NetherRealm Studios"
+                    }
+                },
+                {
+                    "id": 77359,
+                    "company": {
+                        "id": 2546,
+                        "name": "Shiver Games"
+                    }
+                },
+                {
+                    "id": 77360,
+                    "company": {
+                        "id": 14055,
+                        "name": "Warner Bros. Interactive Entertainment"
+                    }
+                }
             ],
             "keywords": [
                 22,
@@ -3752,9 +4193,22 @@ const mapStateToProps = state => ({
             ],
             "name": "Assassin's Creed: Origins",
             "platforms": [
-                6,
-                48,
-                49
+                {
+                    "id": 6,
+                    "abbreviation": "PC"
+                },
+                {
+                    "id": 48,
+                    "abbreviation": "PS4"
+                },
+                {
+                    "id": 49,
+                    "abbreviation": "XONE"
+                },
+                {
+                    "id": 130,
+                    "abbreviation": "switch"
+                }
             ],
             "player_perspectives": [
                 2

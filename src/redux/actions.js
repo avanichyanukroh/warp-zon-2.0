@@ -172,7 +172,7 @@ export const getGameSearchResults = (query, limit) => dispatch => {
         },
         data: `
             fields
-                *;
+                *, cover.image_id, genres.name, platforms.abbreviation, involved_companies.company.name
             search
                 ${query};
             where
