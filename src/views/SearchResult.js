@@ -29,17 +29,11 @@ const styles = {
         backgroundSize: 'cover',
         backgroundPosition: 'center center'
     },
-    gameResultsContainer: {
+    gridWrapper: {
         background: 'white',
         borderRadius: '4px',
         padding: '8px',
-        boxShadow: '0 0 3px gray'
-    },
-    filterContainer: {
-        background: 'white',
-        borderRadius: '4px',
-        padding: '8px',
-        boxShadow: '0 0 3px gray'
+        boxShadow: '0 0 1px gray'
     }
 }
 class SearchResult extends Component {
@@ -89,8 +83,8 @@ class SearchResult extends Component {
             <div style={{ minHeight: '100vh', marginTop: '80px' }}>
                 <BoxContainer>
                     <Grid container spacing={16} style={{ marginBottom:'8px' }}>
-                        <Grid item xs={12} sm={8} md={8}>
-                            <div style={styles.gameResultsContainer}>
+                        <Grid item xs={12} sm={12} md={8}>
+                            <div style={styles.gridWrapper}>
                                 <SortBar
                                     propertyNames={['name', 'rating', 'first_release_date']}
                                     propertyDisplayNames={['TITLE', 'RATING', 'RELEASE DATE']}
@@ -109,7 +103,7 @@ class SearchResult extends Component {
                         </Grid>
                         <Hidden smDown>
                             <Grid item xs={12} sm={4} md={4}>
-                                <div style={styles.filterContainer}>
+                                <div style={styles.gridWrapper}>
                                     <div style={{ margin: '8px 8px 0px', padding: '8px' }}>Games ({gameSearchResults.length})</div>
                                     <Divider variant="middle" />
                                     <Filter />

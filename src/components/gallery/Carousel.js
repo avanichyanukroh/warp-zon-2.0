@@ -91,7 +91,7 @@ class Carousel extends PureComponent {
                             <Grid container spacing={16}>
                                 <Grid item xs={12} sm={8} md={8} style={{ textAlign: 'left' }}>
                                     <div style={{height: '200px', paddingRight: '20px', color: 'white'}}>
-                                        <Typography variant="h4" style={styles.itemDescriptionText}>
+                                        <Typography variant="h4" gutterBottom style={styles.itemDescriptionText}>
                                             <span style={{ cursor: 'pointer' }}>{item.name}</span>
                                         </Typography>
                                         <Typography variant="body1" style={styles.itemDescriptionText}>
