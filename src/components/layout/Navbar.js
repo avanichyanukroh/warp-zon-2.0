@@ -17,6 +17,7 @@ import AccountCircle from '@material-ui/icons/AccountCircle';
 import MailIcon from '@material-ui/icons/Mail';
 import NotificationsIcon from '@material-ui/icons/Notifications';
 import MoreIcon from '@material-ui/icons/MoreVert';
+import Button from '@material-ui/core/Button';
 
 const styles = theme => ({
 	root: {
@@ -25,10 +26,10 @@ const styles = theme => ({
 	grow: {
 		flexGrow: 1,
 	},
-	menuButton: {
-		marginLeft: -12,
-		marginRight: 20,
-	},
+	// menuButton: {
+	// 	marginLeft: -12,
+	// 	marginRight: 20,
+	// },
 	title: {
 		display: 'none',
 		[theme.breakpoints.up('sm')]: {
@@ -71,7 +72,7 @@ const styles = theme => ({
 		transition: theme.transitions.create('width'),
 		width: '100%',
 		[theme.breakpoints.up('md')]: {
-			width: 200,
+			width: 600,
 		},
 	},
 	sectionDesktop: {
@@ -126,7 +127,7 @@ class Navbar extends React.Component {
 				onClose={this.handleMenuClose}
 			>
 				<MenuItem onClick={this.handleMenuClose}>Profile</MenuItem>
-				<MenuItem onClick={this.handleMenuClose}>My account</MenuItem>
+				{/* <MenuItem onClick={this.handleMenuClose}>My account</MenuItem> */}
 			</Menu>
 		);
 
@@ -138,7 +139,7 @@ class Navbar extends React.Component {
 				open={isMobileMenuOpen}
 				onClose={this.handleMenuClose}
 			>
-				<MenuItem onClick={this.handleMobileMenuClose}>
+				{/* <MenuItem onClick={this.handleMobileMenuClose}>
 					<IconButton color="inherit">
 						<Badge badgeContent={4} color="secondary">
 							<MailIcon />
@@ -153,6 +154,12 @@ class Navbar extends React.Component {
 						</Badge>
 					</IconButton>
 					<p>Notifications</p>
+                </MenuItem> */}
+                <MenuItem onClick={this.handleProfileMenuOpen}>
+					<IconButton color="inherit">
+						<AccountCircle />
+					</IconButton>
+					<p>Sign in</p>
 				</MenuItem>
 				<MenuItem onClick={this.handleProfileMenuOpen}>
 					<IconButton color="inherit">
@@ -167,18 +174,18 @@ class Navbar extends React.Component {
 			<div className={classes.root}>
 				<AppBar position="fixed">
 					<Toolbar variant="dense">
-						<IconButton className={classes.menuButton} color="inherit" aria-label="Open drawer">
+						{/* <IconButton className={classes.menuButton} color="inherit" aria-label="Open drawer">
 							<MenuIcon />
-						</IconButton>
+						</IconButton> */}
 						<Typography className={classes.title} variant="h6" color="inherit" noWrap>
-							Material-UI
+							WarpZone
 						</Typography>
 						<div className={classes.search}>
 							<div className={classes.searchIcon}>
 								<SearchIcon />
 							</div>
 							<InputBase
-								placeholder="Search…"
+								placeholder="Search For Video Game…"
 								classes={{
 									root: classes.inputRoot,
 									input: classes.inputInput,
@@ -187,7 +194,7 @@ class Navbar extends React.Component {
 						</div>
 						<div className={classes.grow} />
 						<div className={classes.sectionDesktop}>
-							<IconButton color="inherit">
+							{/* <IconButton color="inherit">
 								<Badge badgeContent={4} color="secondary">
 									<MailIcon />
 								</Badge>
@@ -196,7 +203,8 @@ class Navbar extends React.Component {
 								<Badge badgeContent={17} color="secondary">
 									<NotificationsIcon />
 								</Badge>
-							</IconButton>
+                            </IconButton> */}
+                            <Button style={{color: 'white' }}>Sign in</Button>
 							<IconButton
 								aria-owns={isMenuOpen ? 'material-appbar' : undefined}
 								aria-haspopup="true"
