@@ -14,7 +14,7 @@ const styles = {
     gameCoverImage: {
         objectFit: 'cover',
         width: '100%',
-        height: '100%',
+        height: 'auto',
         borderRadius: '4px',
         boxShadow: '1px 1px 2px lightgray'
     },

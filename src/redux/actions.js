@@ -62,7 +62,25 @@ export const getGameProfile = (gameId) => dispatch => {
         },
         data: `
             fields
-                *, screenshots.*, genres.name, platforms.abbreviation
+                *,
+                screenshots.image_id,
+                cover.image_id,
+                genres.name,
+                platforms.abbreviation,
+                involved_companies.company.name,
+                player_perspectives.name,
+                game_modes.name,
+                themes.name,
+                game_engines.name,
+                collection.name,
+                franchise.name,
+                release_dates.date,
+                release_dates.platform,
+                age_ratings.rating,
+                similar_games.name,
+                similar_games.cover,
+                similar_games.first_release_date,
+                similar_games.rating;
             where
                 id=${gameId};`
     })
@@ -84,7 +102,12 @@ export const getGameProfiles = (gameIds) => dispatch => {
         },
         data: `
             fields
-                *, screenshots.*, genres.name, platforms.abbreviation
+                *,
+                screenshots.*,
+                cover.image_id,
+                genres.name,
+                platforms.abbreviation,
+                involved_companies.company.name;
             where
                 id=(${gameIds});`
     })
@@ -172,7 +195,11 @@ export const getGameSearchResults = (query, limit) => dispatch => {
         },
         data: `
             fields
-                *, cover.image_id, genres.name, platforms.abbreviation, involved_companies.company.name
+                *,
+                cover.image_id,
+                genres.name,
+                platforms.abbreviation,
+                involved_companies.company.name;
             search
                 ${query};
             where
