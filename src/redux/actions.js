@@ -76,7 +76,7 @@ export const getGameProfile = (gameId) => dispatch => {
                 franchise.name,
                 release_dates.date,
                 release_dates.platform,
-                age_ratings.rating_cover_url,
+                age_ratings.rating,
                 similar_games.name,
                 similar_games.cover,
                 similar_games.first_release_date,

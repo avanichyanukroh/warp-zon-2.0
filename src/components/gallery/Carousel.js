@@ -71,8 +71,8 @@ const styles = {
 class Carousel extends PureComponent {
 	render() {
         const { items } = this.props;
-        console.log(moment(items[0].first_release_date).format('MMMM Do YYYY'))
-		return (
+
+        return (
 			<ResponsiveCarousel
 				showThumbs={false}
 				showStatus={false}

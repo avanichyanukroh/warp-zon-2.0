@@ -7,12 +7,21 @@ import Spacer from '../components/common/Spacer';
 import BoxContainer from '../components/layout/BoxContainer';
 import backgroundImage from '../images/breath-of-the-wild-wallpaper.jpg';
 import { StarRate } from '@material-ui/icons';
+import Info from '../components/gameProfile/Info';
+import ImageCarousel from '../components/gallery/ImageCarousel';
+import SectionHeader from '../components/common/SectionHeader';
 
 const styles = {
-    gridWrapper: {
+    gridWrapperCover: {
         background: 'white',
         borderRadius: '4px',
         padding: '8px',
+        boxShadow: '0 0 1px gray'
+    },
+    gridWrapper: {
+        background: 'white',
+        borderRadius: '4px',
+        padding: '16px',
         boxShadow: '0 0 1px gray'
     },
     headerUnderline: {
@@ -88,9 +97,27 @@ const styles = {
     resultText : {
         fontSize: '14px',
         marginBottom: '8px'
+    },
+    ageRatingImage: {
+        height: '120px',
+        widght: 'auto'
     }
-
 }
+
+const ageRatingURL = {
+	1: "http://www.askaboutgames.com/wp-content/uploads/2017/09/age-3-black.jpg",
+	2: "http://www.askaboutgames.com/wp-content/uploads/2017/09/age-7-black-1.jpg",
+	3: "http://www.askaboutgames.com/wp-content/uploads/2017/09/age-12-black.jpg",
+	4: "http://www.askaboutgames.com/wp-content/uploads/2017/09/age-16-black.jpg",
+    5: "http://www.askaboutgames.com/wp-content/uploads/2017/09/age-18-black.jpg",
+	6: "http://oyster.ignimgs.com/mediawiki/apis.ign.com/ratings/b/b5/ESRB-ver2013_RP.png",
+	7: "http://oyster.ignimgs.com/mediawiki/apis.ign.com/ratings/thumb/8/8a/ESRB-ver2013_eC.png/240px-ESRB-ver2013_eC.png",
+	8: "http://oyster.ignimgs.com/mediawiki/apis.ign.com/ratings/thumb/6/63/ESRB-ver2013_E.png/240px-ESRB-ver2013_E.png",
+	9: "http://oyster.ignimgs.com/mediawiki/apis.ign.com/ratings/thumb/a/a3/ESRB-ver2013_E10-Plus.png/240px-ESRB-ver2013_E10-Plus.png",
+	10: "http://oyster.ignimgs.com/mediawiki/apis.ign.com/ratings/thumb/b/bf/ESRB-ver2013_T.png/240px-ESRB-ver2013_T.png",
+	11: "http://oyster.ignimgs.com/mediawiki/apis.ign.com/ratings/thumb/d/d5/ESRB-ver2013_M.png/240px-ESRB-ver2013_M.png",
+	12: "http://oyster.ignimgs.com/mediawiki/apis.ign.com/ratings/thumb/f/f9/ESRB-ver2013_Ao.png/240px-ESRB-ver2013_Ao.png"
+};
 
 class GameProfile extends Component {
 
@@ -107,9 +134,9 @@ class GameProfile extends Component {
                         style={styles.headerUnderline}
                     />
                     <Spacer />
-                    <Grid container spacing={16}>
+                    <Grid container spacing={16} style={{ marginBottom: '8px' }}>
                         <Grid item xs={12} sm={3} md={3}>
-                            <div style={styles.gridWrapper}>
+                            <div style={styles.gridWrapperCover}>
                                 <div style={styles.gameCoverContainer}>
                                     <img
                                         src={`https://images.igdb.com/igdb/image/upload/t_cover_big/${gameProfile[0].cover.image_id}.jpg`}
@@ -182,56 +209,54 @@ class GameProfile extends Component {
                         <Grid item xs={12} sm={8} md={8}>
                         <div style={styles.gridWrapper}>
                             <div style={styles.resultText}>
-                                <b>Summary: </b>
-                                <span>{gameProfile[0].summary}</span>
+                                {gameProfile[0].summary.split('\n').map((item, key) => {
+                                    return <span key={key}>{item}<br/></span>
+                                })}
                             </div>
+                            <Spacer />
+                            <SectionHeader title="Media" />
+                            <ImageCarousel items={gameProfile[0].screenshots} />
                         </div>
                         </Grid>
                         <Grid item xs={12} sm={4} md={4}>
-                        <div style={styles.gridWrapper}>
-                            
-                            <div style={styles.resultText}>
-                                <b>Developers: </b>
-                                <span>{gameProfile[0].involved_companies[0].company.name}</span>
+                            <div style={styles.gridWrapper}>
+                                <Info name="Developers" result={gameProfile[0].involved_companies[0].company.name} />
+                                <Info name="Player Perspective" results={gameProfile[0].player_perspectives} />
+                                <Info name="Game Modes" results={gameProfile[0].game_modes} />
+                                <Info name="Genres" results={gameProfile[0].genres} />
+                                <Info name="Themes" results={gameProfile[0].themes} />
+                                <Info name="Game Engine" results={gameProfile[0].game_engines} />
+                                <Info name="Series" result={gameProfile[0].collection.name} />
+                                {/* <Info name="Franchise" result={gameProfile[0].franchise.name} /> */}
+                                <Grid container spacing={16}>
+                                    <Grid item xs={6} sm={6} md={6}>
+                                        <div style={styles.resultText}>
+                                            <b>Release Dates: </b>
+                                        </div>
+                                    </Grid>
+                                    <Grid item xs={6} sm={6} md={6}>
+                                        {gameProfile[0].release_dates.map((releaseDate, index) => (
+                                            <div style={styles.resultText} key={index}>
+                                                <span>{moment(releaseDate.date).format('MMM Do YYYY')} - {releaseDate.platform.abbreviation}</span>
+                                            </div>
+                                        ))}
+                                    </Grid>
+                                </Grid>
+                                <Grid container spacing={16}>
+                                    <Grid item xs={6} sm={6} md={6}>
+                                        <div style={styles.resultText}>
+                                            <b>Age Rating: </b>
+                                        </div>
+                                    </Grid>
+                                    <Grid item xs={6} sm={6} md={6}>
+                                        {gameProfile[0].age_ratings.map((age_rating, index) => (
+                                            <div style={styles.resultText} key={index}>
+                                                <img src={ageRatingURL[age_rating.rating]} alt="Age Rating" style={styles.ageRatingImage} />
+                                            </div>
+                                        ))}
+                                    </Grid>
+                                </Grid>
                             </div>
-                            <div style={styles.resultText}>
-                                <b>Player Perspective: </b>
-                                <span>{gameProfile[0].involved_companies[0].company.name}</span>
-                            </div>
-                            <div style={styles.resultText}>
-                                <b>Game Modes: </b>
-                                <span>{gameProfile[0].involved_companies[0].company.name}</span>
-                            </div>
-                            <div style={styles.resultText}>
-                                <b>Genres: </b>
-                                <span>{gameProfile[0].involved_companies[0].company.name}</span>
-                            </div>
-                            <div style={styles.resultText}>
-                                <b>Themes: </b>
-                                <span>{gameProfile[0].involved_companies[0].company.name}</span>
-                            </div>
-                            <div style={styles.resultText}>
-                                <b>Game Engine: </b>
-                                <span>{gameProfile[0].involved_companies[0].company.name}</span>
-                            </div>
-                            <div style={styles.resultText}>
-                                <b>Series: </b>
-                                <span>{gameProfile[0].involved_companies[0].company.name}</span>
-                            </div>
-                            <div style={styles.resultText}>
-                                <b>Franchise: </b>
-                                <span>{gameProfile[0].involved_companies[0].company.name}</span>
-                            </div>
-                            <div style={styles.resultText}>
-                                <b>Release Dates: </b>
-                                <span>{gameProfile[0].involved_companies[0].company.name}</span>
-                            </div>
-                            <div style={styles.resultText}>
-                                <b>Age Rating: </b>
-                                <span>{gameProfile[0].involved_companies[0].company.name}</span>
-                            </div>
-                        </div>
-
                         </Grid>
                     </Grid>
                 </BoxContainer>
@@ -251,10 +276,12 @@ const mapStateToProps = state => ({
             "id": 112916,
             "age_ratings": [
                 {
-                    "id": 23688
+                    "id": 23688,
+                    "rating": 6
                 },
                 {
-                    "id": 23691
+                    "id": 23691,
+                    "rating": 5
                 }
             ],
             "aggregated_rating": 81.2727272727273,
@@ -366,22 +393,34 @@ const mapStateToProps = state => ({
                 {
                     "id": 161924,
                     "date": 1555977600,
-                    "platform": 48
+                    "platform": {
+                        "id": 48,
+                        "abbreviation": "PS4"
+                    }
                 },
                 {
                     "id": 161925,
                     "date": 1555977600,
-                    "platform": 49
+                    "platform": {
+                        "id": 49,
+                        "abbreviation": "XONE"
+                    }
                 },
                 {
                     "id": 161926,
                     "date": 1555977600,
-                    "platform": 6
+                    "platform": {
+                        "id": 6,
+                        "abbreviation": "PC"
+                    }
                 },
                 {
                     "id": 161937,
                     "date": 1555977600,
-                    "platform": 130
+                    "platform": {
+                        "id": 130,
+                        "abbreviation": "switch"
+                    }
                 }
             ],
             "screenshots": [
