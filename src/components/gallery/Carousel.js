@@ -82,11 +82,24 @@ class Carousel extends PureComponent {
                 {items.map((item, index) => (
                     <div style={styles.slideContainer} key={index}>
                         <div style={styles.effectOverlay} />
-                        <img
-                            src={`https://images.igdb.com/igdb/image/upload/t_screenshot_med_2x/${item.screenshots[0].image_id}.jpeg`}
-                            alt='game screenshot'
-                            style={styles.backgroundImage}
+                        {
+                            item.screenshots || item.cover
+                            ? <img
+                                src={`https://images.igdb.com/igdb/image/upload/t_screenshot_med_2x/${item.screenshots ? item.screenshots[0].image_id : item.cover.image_id}.jpeg`}
+                                alt='game screenshot'
+                                style={styles.backgroundImage}
+                            />
+                            : <div
+                            style={{
+                                background: 'linear-gradient(to right top, #c0392b, #8e44ad)',
+                                width: '100%',
+                                height: 'auto',
+                                borderRadius: '4px',
+                                boxShadow: '1px 1px 2px lightgray'
+                            }}
                         />
+                        }
+
                         <div style={styles.contentContainer}>
                             <Grid container spacing={16}>
                                 <Grid item xs={12} sm={8} md={8} style={{ textAlign: 'left' }}>
@@ -95,33 +108,37 @@ class Carousel extends PureComponent {
                                             <span style={{ cursor: 'pointer' }}>{item.name}</span>
                                         </Typography>
                                         <Typography variant="body1" style={styles.itemDescriptionText}>
-                                            {item.summary.slice(0, 250)} ...<a href="#"> Read more</a>
+                                            {item.summary ? item.summary.slice(0, 250) : 'None'} ...<a href="#"> Read more</a>
                                         </Typography>
                                         <p>
                                             <b>Genre: </b>
-                                            {item.genres.map((genre, index) => {
-                                                if (index === 0) {
-                                                    return genre.name;
-                                                }
-                                                else {
-                                                    return `, ${genre.name}`;
-                                                }
-                                            })}
+                                            {item.genres
+                                                ? item.genres.map((genre, index) => {
+                                                    if (index === 0) {
+                                                        return genre.name;
+                                                    }
+                                                    else {
+                                                        return `, ${genre.name}`;
+                                                    }
+                                                })
+                                                : 'Unavailable'}
                                         </p>
                                         <p>
                                             <b>Platform: </b>
-                                            {item.platforms.map((platform, index) => (
-                                                <span
-                                                    style={styles.platform}
-                                                    key={index}
-                                                >
-                                                    {platform.abbreviation}
-                                                </span>
-                                            ))}
+                                            {item.platforms
+                                                ? item.platforms.map((platform, index) => (
+                                                    <span
+                                                        style={styles.platform}
+                                                        key={index}
+                                                    >
+                                                        {platform.abbreviation}
+                                                    </span>
+                                                ))
+                                                : 'Unavailable'}
                                         </p>
                                         <p>
                                             <b>Release Date: </b>
-                                            {moment(item.first_release_date).format('MMMM Do YYYY')}
+                                            {moment.unix(item.release_dates.slice(-1).date).format('MMMM Do YYYY')}
                                         </p>
                                     </div>
                                 </Grid>
@@ -131,7 +148,7 @@ class Carousel extends PureComponent {
                                             <iframe 
                                                 title="breath of the wild"
                                                 allowFullScreen="allowfullscreen"
-                                                src="https://www.youtube.com/embed/zw47_q9wbBE?autoplay=1&mute=1"
+                                                src={`https://www.youtube.com/embed/${item.videos[0].video_id}`}
                                                 frameBorder="0"
                                                 autoFocus
                                                 style={styles.iFrame}
@@ -149,7 +166,6 @@ class Carousel extends PureComponent {
 		);
 	}
 }
-
 
 Carousel.propTypes = {
 		

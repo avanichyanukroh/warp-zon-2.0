@@ -131,15 +131,18 @@ class GridGalleryItem extends Component {
                         <Typography variant="h6" style={styles.itemDescriptionText}>{item.name}</Typography>
                         <Grid container spacing={0} justify="space-between">
                             <Grid item xs={6} sm={6} md={6}>
-                                <Typography variant="subtitle1" style={styles.itemDescriptionText}>
-                                    {item.genres.map((genre, index) => {
+                                <Typography variant="caption" style={styles.itemDescriptionText}>
+                                    {item.genres.length <= 2
+                                    ? item.genres.map((genre, index) => {
                                         if (index === 0) {
                                             return genre.name;
                                         }
                                         else {
                                             return `, ${genre.name}`;
                                         }
-                                    })}
+                                    })
+                                    : `${item.genres[0].name}, ${item.genres[1].name}`
+                                }
                                 </Typography>
                             </Grid>
                             <Grid item xs={6} sm={6} md={6} style={{ textAlign: 'right' }}>

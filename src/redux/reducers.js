@@ -6,7 +6,13 @@ import {
     LOAD_GAME_SEARCH_RESULTS
 } from './actions';
 
-const initialState = {}
+const initialState = {
+    // popularGames: [],
+    // gameProfile: [],
+    // newReleases: [],
+    // comingSoons: [],
+    // gameSearchResults: []
+}
 
 export const reducers = (state = initialState, action) => {
 	if (action.type === LOAD_POPULAR_GAMES) {

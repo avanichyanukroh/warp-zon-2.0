@@ -1,5 +1,7 @@
 import axios from 'axios';
 
+const PROXY_URL = "https://cors-anywhere.herokuapp.com/";
+
 export const LOAD_POPULAR_GAMES = 'LOAD_POPULAR_GAMES';
 export const loadPopularGames = (popularGames) => ({
 	type: LOAD_POPULAR_GAMES,
@@ -32,7 +34,7 @@ export const loadGameSearchResults = (gameSearchResults) => ({
 
 export const getPopularGames = () => dispatch => {
     axios({
-        url: 'https://api-v3.igdb.com/games',
+        url: PROXY_URL + 'https://api-v3.igdb.com/games',
         method: 'POST',
         headers: {
             'Accept': 'application/json',
@@ -40,7 +42,11 @@ export const getPopularGames = () => dispatch => {
         },
         data: `
             fields
-                name, popularity;
+                name,
+                popularity,
+                screenshots.image_id,
+                rating,
+                genres.name;
             sort
                 popularity desc;`
     })
@@ -54,7 +60,7 @@ export const getPopularGames = () => dispatch => {
 
 export const getGameProfile = (gameId) => dispatch => {
     axios({
-        url: 'https://api-v3.igdb.com/games',
+        url: PROXY_URL + 'https://api-v3.igdb.com/games',
         method: 'POST',
         headers: {
             'Accept': 'application/json',
@@ -75,12 +81,13 @@ export const getGameProfile = (gameId) => dispatch => {
                 collection.name,
                 franchise.name,
                 release_dates.date,
-                release_dates.platform,
+                release_dates.platform.abbreviation,
                 age_ratings.rating,
                 similar_games.name,
                 similar_games.cover,
                 similar_games.first_release_date,
-                similar_games.rating;
+                similar_games.rating,
+                videos.video_id;
             where
                 id=${gameId};`
     })
@@ -93,8 +100,8 @@ export const getGameProfile = (gameId) => dispatch => {
 }
 
 export const getGameProfiles = (gameIds) => dispatch => {
-    axios({
-        url: 'https://api-v3.igdb.com/games',
+    return axios({
+        url: PROXY_URL + 'https://api-v3.igdb.com/games',
         method: 'POST',
         headers: {
             'Accept': 'application/json',
@@ -107,6 +114,8 @@ export const getGameProfiles = (gameIds) => dispatch => {
                 cover.image_id,
                 genres.name,
                 platforms.abbreviation,
+                release_dates.*,
+                videos.video_id,
                 involved_companies.company.name;
             where
                 id=(${gameIds});`
@@ -121,7 +130,7 @@ export const getGameProfiles = (gameIds) => dispatch => {
 
 export const getNewReleases = () => dispatch => {
     axios({
-        url: 'https://api-v3.igdb.com/release_dates',
+        url: PROXY_URL + 'https://api-v3.igdb.com/release_dates',
         method: 'POST',
         headers: {
             'Accept': 'application/json',
@@ -130,19 +139,19 @@ export const getNewReleases = () => dispatch => {
         data: `
             fields
                 *;
-            where
-                date < ${Date.now()};
-            sort
-                date desc;`
+                   where
+                       date < 1558655459;
+                   sort
+                       date desc;`
     })
     .then(res => {
+        console.log(res.data)
         let newReleaseIds = [];
 
         res.data.forEach(result => {
-            newReleaseIds.push(result.id);
+            newReleaseIds.push(result.game);
         });
-
-        return getGameProfiles(newReleaseIds);
+        return dispatch(getGameProfiles(newReleaseIds));
     })
     .then(newReleases => {
         dispatch(loadNewReleases(newReleases));
@@ -154,7 +163,7 @@ export const getNewReleases = () => dispatch => {
 
 export const getComingSoons = () => dispatch => {
     axios({
-        url: 'https://api-v3.igdb.com/release_dates',
+        url: PROXY_URL + 'https://api-v3.igdb.com/release_dates',
         method: 'POST',
         headers: {
             'Accept': 'application/json',
@@ -186,8 +195,9 @@ export const getComingSoons = () => dispatch => {
 }
 
 export const getGameSearchResults = (query, limit) => dispatch => {
+    dispatch(loadGameSearchResults(null));
     axios({
-        url: 'https://api-v3.igdb.com/games',
+        url: PROXY_URL + 'https://api-v3.igdb.com/games',
         method: 'POST',
         headers: {
             'Accept': 'application/json',
@@ -199,9 +209,10 @@ export const getGameSearchResults = (query, limit) => dispatch => {
                 cover.image_id,
                 genres.name,
                 platforms.abbreviation,
-                involved_companies.company.name;
+                involved_companies.company.name,
+                release_dates.date;
             search
-                ${query};
+                "${query}";
             where
                 version_parent = null;
             limit

@@ -1,23 +1,24 @@
 import React from 'react';
 import PropTypes from 'prop-types';
+import { connect } from 'react-redux';
 
 import AppBar from '@material-ui/core/AppBar';
 import Toolbar from '@material-ui/core/Toolbar';
 import IconButton from '@material-ui/core/IconButton';
 import Typography from '@material-ui/core/Typography';
 import InputBase from '@material-ui/core/InputBase';
-import Badge from '@material-ui/core/Badge';
 import MenuItem from '@material-ui/core/MenuItem';
 import Menu from '@material-ui/core/Menu';
 import { fade } from '@material-ui/core/styles/colorManipulator';
 import { withStyles } from '@material-ui/core/styles';
-import MenuIcon from '@material-ui/icons/Menu';
 import SearchIcon from '@material-ui/icons/Search';
 import AccountCircle from '@material-ui/icons/AccountCircle';
-import MailIcon from '@material-ui/icons/Mail';
-import NotificationsIcon from '@material-ui/icons/Notifications';
 import MoreIcon from '@material-ui/icons/MoreVert';
 import Button from '@material-ui/core/Button';
+import { Link } from 'react-router-dom';
+import { Redirect } from 'react-router';
+
+import { getGameSearchResults } from '../../redux/actions';
 
 const styles = theme => ({
 	root: {
@@ -92,7 +93,9 @@ const styles = theme => ({
 class Navbar extends React.Component {
 	state = {
 		anchorEl: null,
-		mobileMoreAnchorEl: null,
+        mobileMoreAnchorEl: null,
+        searchQuery: '',
+        redirectToSearchResults: false
 	};
 
 	handleProfileMenuOpen = event => {
@@ -112,8 +115,31 @@ class Navbar extends React.Component {
 		this.setState({ mobileMoreAnchorEl: null });
 	};
 
+    handleInputChange = event => {
+		this.setState({
+			searchQuery: event.target.value
+		})
+    };
+
+    handleOnSubmit = event => {
+        console.log('query search is: ', this.state.searchQuery)
+        event.preventDefault();
+        this.props.dispatch(getGameSearchResults(this.state.searchQuery, 25));
+        this.setState({
+            redirectToSearchResults: true
+        });
+    }
+    
+    handleRedirectToSearchResults = () => {
+        if (this.state.redirectToSearchResults) {
+            console.log('redirecting')
+            this.setState({redirectToSearchResults: false})
+            return <Redirect to={`/search-results?search=${this.state.searchQuery}`} />
+        }
+    }
+
 	render() {
-		const { anchorEl, mobileMoreAnchorEl } = this.state;
+		const { anchorEl, mobileMoreAnchorEl, searchQuery } = this.state;
 		const { classes } = this.props;
 		const isMenuOpen = Boolean(anchorEl);
 		const isMobileMenuOpen = Boolean(mobileMoreAnchorEl);
@@ -169,28 +195,33 @@ class Navbar extends React.Component {
 				</MenuItem>
 			</Menu>
 		);
-
+        
 		return (
 			<div className={classes.root}>
+                {this.handleRedirectToSearchResults()}
 				<AppBar position="fixed">
 					<Toolbar variant="dense">
 						{/* <IconButton className={classes.menuButton} color="inherit" aria-label="Open drawer">
 							<MenuIcon />
 						</IconButton> */}
 						<Typography className={classes.title} variant="h6" color="inherit" noWrap>
-							WarpZone
+                        <Link to="/" style={{textDecoration: 'none', color: 'white'}}>WarpZone</Link>
 						</Typography>
 						<div className={classes.search}>
 							<div className={classes.searchIcon}>
 								<SearchIcon />
 							</div>
+                            <form onSubmit={this.handleOnSubmit}>
 							<InputBase
 								placeholder="Search For Video Game…"
 								classes={{
 									root: classes.inputRoot,
 									input: classes.inputInput,
-								}}
+                                }}
+                                value={searchQuery}
+                                onChange={this.handleInputChange}
 							/>
+                            </form>
 						</div>
 						<div className={classes.grow} />
 						<div className={classes.sectionDesktop}>
@@ -228,8 +259,12 @@ class Navbar extends React.Component {
 	}
 }
 
+const mapStateToProps = state => ({
+
+});
+
 Navbar.propTypes = {
 	classes: PropTypes.object.isRequired,
 };
 
-export default withStyles(styles)(Navbar);
+export default connect(mapStateToProps)(withStyles(styles)(Navbar));
