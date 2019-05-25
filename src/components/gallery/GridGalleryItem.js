@@ -4,6 +4,7 @@ import PropTypes from 'prop-types';
 import Grid from '@material-ui/core/Grid';
 import { Typography } from '@material-ui/core';
 import { StarRate } from '@material-ui/icons';
+import { Link } from 'react-router-dom';
 
 const styles = {
     itemContainer: {
@@ -114,7 +115,12 @@ class GridGalleryItem extends Component {
         return (
             <Grid item xs={xs} sm={sm} md={md} style={frame === 'large' ? styles.largeFrame : styles.smallFrame}>
                 <div style={styles.itemContainer} onMouseEnter={this.handleOnMouseEnter} onMouseLeave={this.handleOnMouseLeave}>
-                    <div style={styles.linkOverlay} />
+                    <Link
+                        to={`/game-profile?name=${item.name}&id=${item.id}`}
+                        style={{ textDecoration: 'none', color: 'black' }}
+                    >
+                        <div style={styles.linkOverlay} />
+                    </Link>
                     <div
                         style={
                             frame === 'large' 

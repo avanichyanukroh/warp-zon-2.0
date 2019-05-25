@@ -145,6 +145,7 @@ class SearchResult extends Component {
                         src={backgroundImage}
                         alt="breath of the wild background"
                         style={styles.backgroundImage}
+                        class="fade-in"
                     />
                     <div style={styles.backgroundImageEffectOverlay} />
                 </div>

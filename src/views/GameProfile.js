@@ -104,6 +104,11 @@ const styles = {
     ageRatingImage: {
         height: '120px',
         widght: 'auto'
+    },
+    iFrameAltImage: {
+        objectFit: 'cover',
+        width: '100%',
+        height: '100%'
     }
 }
 
@@ -226,15 +231,24 @@ class GameProfile extends Component {
                             </Grid>
                             <Grid item xs={12} sm={9} md={9}>
                                 <div style={styles.iFrameContainer}>
-                                    <iframe 
-                                        title="breath of the wild"
-                                        allowFullScreen="allowfullscreen"
-                                        src={`https://www.youtube.com/embed/${gameProfile[0].videos[0].video_id}?autoplay=1&mute=1"`}
-                                        frameBorder="0"
-                                        autoFocus
-                                        style={styles.iFrame}
-                                    >
-                                    </iframe>
+                                    {
+                                        gameProfile[0].videos
+                                            ? <iframe 
+                                                title="breath of the wild"
+                                                allowFullScreen="allowfullscreen"
+                                                src={`https://www.youtube.com/embed/${gameProfile[0].videos[0].video_id}?autoplay=1&mute=1"`}
+                                                frameBorder="0"
+                                                autoFocus
+                                                style={styles.iFrame}
+                                            >
+                                            </iframe>
+                                            : <img
+                                                src={`https://images.igdb.com/igdb/image/upload/t_screenshot_med_2x/${gameProfile[0].screenshots[0].image_id}.jpeg`}
+                                                alt='game screenshot'
+                                                style={styles.iFrameAltImage}
+                                            />
+                                    }
+                                    
                                 </div>
                             </Grid>
                         </Grid>
@@ -263,25 +277,31 @@ class GameProfile extends Component {
                                         name="Player Perspective"
                                         results={gameProfile[0].player_perspectives
                                             ? gameProfile[0].player_perspectives
-                                            : 'Unavailable'}
+                                            : [{name: 'Unavailable'}]}
                                     />
                                     <Info
                                         name="Game Modes"
                                         results={gameProfile[0].game_modes
                                             ? gameProfile[0].game_modes
-                                            : 'Unavailable'}
+                                            : [{name: 'Unavailable'}]}
                                     />
                                     <Info
                                         name="Genres"
-                                        results={gameProfile[0].genres}
+                                        results={gameProfile[0].genres
+                                            ? gameProfile[0].genres
+                                            : [{name: 'Unavailable'}]}
                                     />
                                     <Info
                                         name="Themes"
-                                        results={gameProfile[0].themes}
+                                        results={gameProfile[0].themes
+                                            ? gameProfile[0].themes
+                                            : [{name: 'Unavailable'}]}
                                     />
                                     <Info
                                         name="Game Engine"
-                                        results={gameProfile[0].game_engines}
+                                        results={gameProfile[0].game_engines
+                                            ? gameProfile[0].game_engines
+                                            : [{name: 'Unavailable'}]}
                                     />
                                     <Info
                                         name="Series"
@@ -330,6 +350,7 @@ class GameProfile extends Component {
                         src={`https://images.igdb.com/igdb/image/upload/t_1080p/${gameProfile[0].screenshots[0].image_id}.jpeg`}
                         alt="breath of the wild background"
                         style={styles.backgroundImage}
+                        class="fade-in"
                     />
                 </div>
             );

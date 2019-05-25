@@ -4,6 +4,8 @@ import moment from 'moment';
 
 import { Carousel as ResponsiveCarousel } from 'react-responsive-carousel';
 import { Typography, Grid, Hidden } from '@material-ui/core';
+import { Link } from 'react-router-dom';
+
 
 import 'react-responsive-carousel/lib/styles/carousel.min.css';
 import './Carousel.css';
@@ -105,7 +107,12 @@ class Carousel extends PureComponent {
                                 <Grid item xs={12} sm={8} md={8} style={{ textAlign: 'left' }}>
                                     <div style={{height: '200px', paddingRight: '20px', color: 'white'}}>
                                         <Typography variant="h4" gutterBottom style={styles.itemDescriptionText}>
-                                            <span style={{ cursor: 'pointer' }}>{item.name}</span>
+                                        <Link
+                                            to={`/game-profile?name=${item.name}&id=${item.id}`}
+                                            style={{ textDecoration: 'none', color: 'white' }}
+                                        >
+                                        {item.name}
+                                        </Link>
                                         </Typography>
                                         <Typography variant="body1" style={styles.itemDescriptionText}>
                                             {item.summary ? item.summary.slice(0, 250) : 'None'} ...<a href="#"> Read more</a>
@@ -138,7 +145,7 @@ class Carousel extends PureComponent {
                                         </p>
                                         <p>
                                             <b>Release Date: </b>
-                                            {moment.unix(item.release_dates.slice(-1).date).format('MMMM Do YYYY')}
+                                            {moment(item.release_dates.slice(-1).date).format('MMMM Do YYYY')}
                                         </p>
                                     </div>
                                 </Grid>
