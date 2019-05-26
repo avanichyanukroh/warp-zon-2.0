@@ -1,68 +1,86 @@
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+# Warp Zone 2.0
 
-## Available Scripts
+An application for users to research their next video game of interest along with their current sale prices.
 
-In the project directory, you can run:
+## Motivation
 
-### `npm start`
+Tired of playing the same game or simply just looking for a great video game to gift? It's a lot of work to keep searching different sites to figure out which video game is the right one for you or the person you are buying it for. Sometimes after you find the right one, it was just simply out of your budget range. This gave me the idea to create a simple and effortless application that combines both aspects of video game and price comparison research.
 
-Runs the app in the development mode.<br>
-Open [http://localhost:3000](http://localhost:3000) to view it in the browser.
+## Screenshots
 
-The page will reload if you make edits.<br>
-You will also see any lint errors in the console.
+Registeration Page:
 
-### `npm test`
+![registeration page](screenshots/registeration-page.png)
 
-Launches the test runner in the interactive watch mode.<br>
-See the section about [running tests](https://facebook.github.io/create-react-app/docs/running-tests) for more information.
+Login Page:
 
-### `npm run build`
+![login page](screenshots/login-page.png)
 
-Builds the app for production to the `build` folder.<br>
-It correctly bundles React in production mode and optimizes the build for the best performance.
+Landing Page:
 
-The build is minified and the filenames include the hashes.<br>
-Your app is ready to be deployed!
+![landing page](screenshots/landing-page.png)
 
-See the section about [deployment](https://facebook.github.io/create-react-app/docs/deployment) for more information.
+Search Results Page:
 
-### `npm run eject`
+![search results page](screenshots/search-results-page.png)
 
-**Note: this is a one-way operation. Once you `eject`, you can’t go back!**
+Game Profile Page:
 
-If you aren’t satisfied with the build tool and configuration choices, you can `eject` at any time. This command will remove the single build dependency from your project.
+![game profile page](screenshots/game-profile-page.png)
 
-Instead, it will copy all the configuration files and the transitive dependencies (Webpack, Babel, ESLint, etc) right into your project so you have full control over them. All of the commands except `eject` will still work, but they will point to the copied scripts so you can tweak them. At this point you’re on your own.
+Game Profile Page (Price List Section):
 
-You don’t have to ever use `eject`. The curated feature set is suitable for small and middle deployments, and you shouldn’t feel obligated to use this feature. However we understand that this tool wouldn’t be useful if you couldn’t customize it when you are ready for it.
+![game profile page price list section](screenshots/game-profile-page-2.png)
 
-## Learn More
+User Profile Page:
 
-You can learn more in the [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started).
+![user profile page](screenshots/user-profile-page.png)
 
-To learn React, check out the [React documentation](https://reactjs.org/).
+Mobile Landing Page:
 
-### Code Splitting
+![mobile landing page](screenshots/landing-page-mobile.png)
 
-This section has moved here: https://facebook.github.io/create-react-app/docs/code-splitting
+Mobile User Profile Page:
 
-### Analyzing the Bundle Size
+![mobile user profile page](screenshots/user-profile-page-mobile.png)
 
-This section has moved here: https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size
+## Demo
 
-### Making a Progressive Web App
+username: gamer1
+password: password
 
-This section has moved here: https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app
+Log in with a preexisting demo account listed above to try out a personal profile account.
 
-### Advanced Configuration
+## Built With
 
-This section has moved here: https://facebook.github.io/create-react-app/docs/advanced-configuration
+* HTML
+* CSS
+* JavaScript
+* React
+* Redux
+* Node.js
+* Mlab
+* Heroku
 
-### Deployment
+## Features
 
-This section has moved here: https://facebook.github.io/create-react-app/docs/deployment
+* Search video games by title.
+* Popular games currently slider.
+* Soon to release games slider (randomized platform).
+* Price comparison section per game profile.
+* Personal and customizable user profile.
+* Add and delete games on/off wishlist.
 
-### `npm run build` fails to minify
+## Future implementations
 
-This section has moved here: https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify
+* Advance searches and filters (Search by genre, platform, developers).
+* Personalized landing page based off user's genre preference and platform.
+* Share and collaborate between users with personal profiles.
+* Price watch list.
+* Game release watch list.
+* Game review section.
+* Relevant news in landing page and game profile page.
+
+## Author
+
+* **Anawin Vanichyanukroh** - ** - Front-End Development, Back-End Development, Testing, Styling
