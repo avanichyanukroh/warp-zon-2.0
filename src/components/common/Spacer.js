@@ -3,7 +3,7 @@ import React, { Fragment } from 'react';
 const Spacer = () => {
     return (
         <Fragment>
-            <div style={{ height: '50px' }} />
+            <div style={{ height: '32px' }} />
         </Fragment>
     );
 }

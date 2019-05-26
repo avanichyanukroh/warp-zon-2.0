@@ -26,9 +26,20 @@ const styles = {
         zIndex: '-10',
         height: '56.25vw',
         width: '99vw',
-        background: 'linear-gradient(rgba(250,250,250, .6), rgba(250,250,250, 1))',
+        background: 'linear-gradient(rgba(250,250,250, 0), rgba(250,250,250, 1))',
         backgroundSize: 'cover',
         backgroundPosition: 'center center'
+    },
+    backgroundOverlay: {
+        position: 'absolute',
+        top: 0,
+        left: 0,
+        zIndex: '-9',
+        width: '100%',
+        height: '100%',
+        backgroundSize: 'cover',
+        backgroundPosition: 'center center',
+        background: 'linear-gradient(to bottom, rgba(0,0,0,0.7), rgba(0,0,0,0))'
     },
     gridWrapper: {
         background: 'white',
@@ -81,7 +92,7 @@ class SearchResult extends Component {
 
         if (!gameSearchResults) {
             return (
-                <div style={{ minHeight: '100vh', marginTop: '80px' }}>
+                <div style={{ minHeight: '100vh', marginTop: '80px', overflowX: 'hidden', overflowY: 'hidden' }}>
                     <div
                         style={{
                             display: 'block',
@@ -101,12 +112,13 @@ class SearchResult extends Component {
                         style={styles.backgroundImage}
                     />
                     <div style={styles.backgroundImageEffectOverlay} />
+                    <div style={styles.backgroundOverlay} />
                 </div>
             );
         }
         else {
             return (
-                <div style={{ minHeight: '100vh', marginTop: '80px' }}>
+                <div style={{ minHeight: '100vh', marginTop: '80px', overflowX: 'hidden', overflowY: 'hidden' }}>
                     <BoxContainer>
                         <Grid container spacing={16} style={{ marginBottom:'8px' }}>
                             <Grid item xs={12} sm={12} md={8}>
@@ -145,9 +157,10 @@ class SearchResult extends Component {
                         src={backgroundImage}
                         alt="breath of the wild background"
                         style={styles.backgroundImage}
-                        class="fade-in"
+                        className="fade-in"
                     />
                     <div style={styles.backgroundImageEffectOverlay} />
+                    <div style={styles.backgroundOverlay} />
                 </div>
             );
         }

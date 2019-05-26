@@ -23,6 +23,12 @@ const styles = {
         width: '100%',
         height: '100%'
     },
+    backgroundImageAlt: {
+        objectFit: 'cover',
+        width: '100%',
+        height: '100%',
+        background: 'linear-gradient(to bottom, #c31432, #240b36)'
+    },
     itemDescriptionContainer: {
         position: 'absolute',
         width: '100%',
@@ -46,7 +52,8 @@ const styles = {
     starIcon: {
         position: 'relative',
         top: '10px',
-        left: 0
+        left: 0,
+        color: '#f9ca24'
     },
     smallFrameOverlay: {
         position: 'absolute',
@@ -128,11 +135,15 @@ class GridGalleryItem extends Component {
                             : (isActive ? styles.smallFrameOverlayActive : styles.smallFrameOverlay)
                         }
                     />
-                    <img
-                        src={`https://images.igdb.com/igdb/image/upload/t_screenshot_med_2x/${item.screenshots[0].image_id}.jpeg`}
-                        alt='game screenshot'
-                        style={styles.backgroundImage}
-                    />
+                    {
+                        item.screenshots
+                        ? <img
+                            src={`https://images.igdb.com/igdb/image/upload/t_screenshot_med_2x/${item.screenshots[0].image_id}.jpeg`}
+                            alt='game screenshot'
+                            style={styles.backgroundImage}
+                        />
+                        : <div style={styles.backgroundImageAlt} />
+                    }
                     <div style={styles.itemDescriptionContainer}>
                         <Typography variant="h6" style={styles.itemDescriptionText}>{item.name}</Typography>
                         <Grid container spacing={0} justify="space-between">
@@ -153,8 +164,12 @@ class GridGalleryItem extends Component {
                             </Grid>
                             <Grid item xs={6} sm={6} md={6} style={{ textAlign: 'right' }}>
                                 <Typography variant="h6" style={styles.itemRatingValue}>
-                                    {(Math.floor(item.rating) / 10)}
-                                    <StarRate color="primary" fontSize="large" style={styles.starIcon} />
+                                {
+                                    item.rating
+                                    ? (Math.floor(item.rating) / 10)
+                                    : "NR"
+                                }
+                                    <StarRate fontSize="large" style={styles.starIcon} />
                                 </Typography>
                             </Grid>
                         </Grid>

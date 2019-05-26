@@ -9,10 +9,11 @@ const styles = (height) => ({
 		display: 'flex',
 		flexDirection: 'column',
 		height: height,
-		justifyContent: 'center'
+        justifyContent: 'center',
+        background: 'rgba(0, 0, 0, 0.3)'
 	},
 	parallaxTitle: {
-		textShadow: '5px 5px 5px black',
+		textShadow: '1px 1px 3px black',
 		color: 'white'
 	}
 })
@@ -29,10 +30,9 @@ class ParallaxHero extends PureComponent {
 				<div
 					style={styles(this.props.height).parallaxInnerContainer}
 				>
-					<Typography variant="h4" align="center" style={styles().parallaxTitle}>
-						<b>{this.props.textLine1}</b>
-                        <br />
-						<b>{this.props.textLine2}</b>
+					<Typography variant="h5" align="center" style={styles().parallaxTitle}>
+                        <div className="brand-text" style={{ fontSize: '38px', color: '#f9ca24', fontWeight: 600, marginBottom: '8px' }}>Warp Zone</div>
+                        <div style={{ fontStyle: 'italic' }}>{this.props.text}</div>
 					</Typography>
 				</div>
 			</Parallax>

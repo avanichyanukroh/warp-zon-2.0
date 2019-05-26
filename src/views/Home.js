@@ -29,8 +29,7 @@ class Home extends Component {
                 <ParallaxHero
                     background={heroImage}
                     height="500px"
-                    textLine1="Welcome!"
-                    textLine2="Find the right game for the right price here, at Warp Zone."
+                    text="DISCOVER YOUR NEXT GAME"
                 />
                 <div
 					style={{
@@ -50,12 +49,11 @@ class Home extends Component {
         }
         else {
             return (
-                <div>
+                <div style={{ overflowX: 'hidden', overflowY: 'hidden' }}>
                     <ParallaxHero
                         background={heroImage}
                         height="500px"
-                        textLine1="Welcome!"
-                        textLine2="Find the right game for the right price here, at Warp Zone."
+                        text="Discover your next game"
                     />
                     <Spacer />
                     <BoxContainer>

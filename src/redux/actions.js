@@ -145,7 +145,6 @@ export const getNewReleases = () => dispatch => {
                        date desc;`
     })
     .then(res => {
-        console.log(res.data)
         let newReleaseIds = [];
 
         res.data.forEach(result => {

@@ -4,7 +4,6 @@ import moment from 'moment';
 import queryString from 'query-string';
 
 import { Grid, Typography } from '@material-ui/core';
-import Spacer from '../components/common/Spacer';
 import BoxContainer from '../components/layout/BoxContainer';
 import { StarRate } from '@material-ui/icons';
 import Info from '../components/gameProfile/Info';
@@ -27,13 +26,13 @@ const styles = {
         padding: '16px',
         boxShadow: '0 0 1px gray'
     },
-    headerUnderline: {
-        background: 'linear-gradient(to right, #009fff, #ec2f4b)',
-        height: '3px',
-        width: '185px',
-        display: 'inline-block',
-        marginBottom: '8px',
-        borderRadius: '15px'
+    gameTitleHeader: {
+        color: 'white',
+        fontWeight: 600,
+        padding: '8px',
+        textAlign: 'center',
+        textShadow: '4px 4px 5px black',
+        margin: '0 auto 16px'
     },
     iFrameContainer: {
         position: 'relative',
@@ -53,15 +52,26 @@ const styles = {
         height: '100%'
     },
     backgroundImage: {
-        position: "absolute",
+        position: 'absolute',
         top: 0,
         left: 0,
         zIndex: '-10',
         width: '100%',
         backgroundSize: 'cover',
         backgroundPosition: 'center center',
-        WebkitMaskImage:'-webkit-gradient(linear, left top, left bottom, from(rgba(0,0,0,0.5)), to(rgba(0,0,0,0)))',
-        maskImage: 'linear-gradient(to bottom, rgba(0,0,0,0.5), rgba(0,0,0,0))'
+        WebkitMaskImage:'-webkit-gradient(linear, left top, left bottom, from(rgba(0,0,0,1)), to(rgba(0,0,0,0)))',
+        maskImage: 'linear-gradient(to bottom, rgba(0,0,0,1), rgba(0,0,0,0))'
+    },
+    backgroundOverlay: {
+        position: 'absolute',
+        top: 0,
+        left: 0,
+        zIndex: '-9',
+        width: '100%',
+        height: '100%',
+        backgroundSize: 'cover',
+        backgroundPosition: 'center center',
+        background: 'linear-gradient(to bottom, rgba(0,0,0,0.7), rgba(0,0,0,0))'
     },
     gameCoverContainer: {
         position: 'relative',
@@ -95,7 +105,8 @@ const styles = {
         position: 'relative',
         top: '10px',
         left: 0,
-        fontSize: '40'
+        fontSize: '40',
+        color: '#f9ca24'
     },
     resultText : {
         fontSize: '14px',
@@ -132,7 +143,6 @@ class GameProfile extends Component {
     componentDidMount() {
         const parsed = queryString.parse(this.props.location.search);
         const gameId = parsed.id;
-        console.log(gameId)
         this.props.dispatch(getGameProfile(gameId));
     }
 
@@ -144,7 +154,7 @@ class GameProfile extends Component {
         const { gameProfile } = this.props;
         if (!gameProfile) {
             return (
-                <div style={{ minHeight: '100vh', marginTop: '80px' }}>
+                <div style={{ minHeight: '100vh', marginTop: '80px', overflowX: 'hidden', overflowY: 'hidden' }}>
                     <div
                         style={{
                             display: 'block',
@@ -163,15 +173,11 @@ class GameProfile extends Component {
         }
         else {
             return (
-                <div style={{ minHeight: '100vh', marginTop: '80px' }}>
+                <div style={{ minHeight: '100vh', marginTop: '80px', padding: '8px', overflowX: 'hidden', overflowY: 'hidden' }}>
                     <BoxContainer>
-                        <Typography variant="h3" align="left">
-                            <b>{gameProfile[0].name}</b>
+                        <Typography variant="h3" align="center">
+                            <div className="header-text" style={styles.gameTitleHeader}>{gameProfile[0].name}</div>
                         </Typography>
-                        <div
-                            style={styles.headerUnderline}
-                        />
-                        <Spacer />
                         <Grid container spacing={16} style={{ marginBottom: '8px' }}>
                             <Grid item xs={12} sm={3} md={3}>
                                 <div style={styles.gridWrapperCover}>
@@ -184,17 +190,21 @@ class GameProfile extends Component {
                                     </div>
                                     <div style={styles.gameCoverDescriptionContainer}>
                                         <Typography variant="body1" style={styles.itemRatingValue}>
-                                            {(Math.floor(gameProfile[0].rating) / 10)}
-                                            <StarRate color="primary" style={styles.starIcon} />
+                                        {
+                                            gameProfile[0].rating
+                                            ? (Math.floor(gameProfile[0].rating) / 10)
+                                            : "NR"
+                                        }
+                                            <StarRate style={styles.starIcon} />
                                         </Typography>
                                         <div style={styles.resultText}>
                                             <b>Genre: </b>
                                             {gameProfile[0].genres.map((genre, index) => {
                                                 if (index === 0) {
-                                                    return <span>{genre.name}</span>
+                                                    return <span key={index}>{genre.name}</span>
                                                 }
                                                 else {
-                                                    return <span>, {genre.name}</span>
+                                                    return <span key={index}>, {genre.name}</span>
                                                 }
                                             })}
                                         </div>
@@ -224,7 +234,7 @@ class GameProfile extends Component {
                                         </div>
                                         <div style={styles.resultText}>
                                             <b>Release Date: </b>
-                                            <span>{moment(gameProfile[0].first_release_date).format('MMMM Do YYYY')}</span>
+                                            <span>{moment.unix(gameProfile[0].first_release_date).format('MMMM Do YYYY')}</span>
                                         </div>
                                     </div>
                                 </div>
@@ -236,7 +246,7 @@ class GameProfile extends Component {
                                             ? <iframe 
                                                 title="breath of the wild"
                                                 allowFullScreen="allowfullscreen"
-                                                src={`https://www.youtube.com/embed/${gameProfile[0].videos[0].video_id}?autoplay=1&mute=1"`}
+                                                src={`https://www.youtube.com/embed/${gameProfile[0].videos[0].video_id}?autoplay=1&mute=1`}
                                                 frameBorder="0"
                                                 autoFocus
                                                 style={styles.iFrame}
@@ -260,7 +270,7 @@ class GameProfile extends Component {
                                         return <span key={key}>{item}<br/></span>
                                     })}
                                 </div>
-                                <Spacer />
+                                <div style={{ marginBottom: '25px' }} />
                                 <SectionHeader title="Media" />
                                 <ImageCarousel items={gameProfile[0].screenshots} />
                             </div>
@@ -319,7 +329,7 @@ class GameProfile extends Component {
                                         <Grid item xs={6} sm={6} md={6}>
                                             {gameProfile[0].release_dates.map((releaseDate, index) => (
                                                 <div style={styles.resultText} key={index}>
-                                                    <span>{moment(releaseDate.date).format('MMM Do YYYY')} - {releaseDate.platform.abbreviation}</span>
+                                                    <span>{moment.unix(releaseDate.date).format('MMM Do YYYY')} - {releaseDate.platform.abbreviation}</span>
                                                 </div>
                                             ))}
                                         </Grid>
@@ -350,8 +360,9 @@ class GameProfile extends Component {
                         src={`https://images.igdb.com/igdb/image/upload/t_1080p/${gameProfile[0].screenshots[0].image_id}.jpeg`}
                         alt="breath of the wild background"
                         style={styles.backgroundImage}
-                        class="fade-in"
+                        className="fade-in"
                     />
+                    <div style={styles.backgroundOverlay} />
                 </div>
             );
         }

@@ -39,7 +39,8 @@ const styles = {
     starIcon: {
         position: 'relative',
         top: '6px',
-        left: 0
+        left: 0,
+        color: '#f9ca24'
     }
 }
 
@@ -61,9 +62,9 @@ class SearchResultItem extends PureComponent {
                             />
                             : <div
                                 style={{
-                                    background: 'linear-gradient(to right top, #c0392b, #8e44ad)',
+                                    background: 'linear-gradient(to right, #485563, #29323c)',
                                     width: '100%',
-                                    height: 'auto',
+                                    height: '100%',
                                     borderRadius: '4px',
                                     boxShadow: '1px 1px 2px lightgray'
                                 }}
@@ -109,8 +110,12 @@ class SearchResultItem extends PureComponent {
                         </span>}
 
                         <Typography variant="body1" style={styles.itemRatingValue}>
-                            {(Math.floor(gameSearchResult.rating) / 10)}
-                            <StarRate color="primary" style={styles.starIcon} />
+                            {
+                                gameSearchResult.rating
+                                ? (Math.floor(gameSearchResult.rating) / 10)
+                                : "NR"
+                            }
+                            <StarRate style={styles.starIcon} />
                         </Typography>
 
                         <Typography variant="body1" style={{ marginTop: '16px' }}>
@@ -121,7 +126,7 @@ class SearchResultItem extends PureComponent {
                                 ? <span>...
                                         <Link
                                             to={`/game-profile?name=${gameSearchResult.name}&id=${gameSearchResult.id}`}
-                                            style={{ textDecoration: 'none', color: 'blue' }}
+                                            style={{ textDecoration: 'none', color: '#f9ca24', fontWeight: 600 }}
                                         >
                                             Read more
                                         </Link>

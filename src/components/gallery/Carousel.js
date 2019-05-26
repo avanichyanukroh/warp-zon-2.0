@@ -115,7 +115,13 @@ class Carousel extends PureComponent {
                                         </Link>
                                         </Typography>
                                         <Typography variant="body1" style={styles.itemDescriptionText}>
-                                            {item.summary ? item.summary.slice(0, 250) : 'None'} ...<a href="#"> Read more</a>
+                                            {item.summary ? item.summary.slice(0, 250) : 'None'} ... 
+                                            <Link
+                                                to={`/game-profile?name=${item.name}&id=${item.id}`}
+                                                style={{ textDecoration: 'none', color: '#f9ca24', fontWeight: 600 }}
+                                            >
+                                                Read more
+                                            </Link>
                                         </Typography>
                                         <p>
                                             <b>Genre: </b>
@@ -149,7 +155,7 @@ class Carousel extends PureComponent {
                                         </p>
                                     </div>
                                 </Grid>
-                                <Hidden only={['xs', 's']}>
+                                <Hidden smDown>
                                     <Grid item xs={12} sm={4} md={4} style={{ textAlign: 'left' }}>
                                         <div style={styles.iFrameContainer}>
                                             <iframe 
