@@ -92,7 +92,7 @@ class SearchResult extends Component {
 
         if (!gameSearchResults) {
             return (
-                <div style={{ minHeight: '100vh', marginTop: '80px', overflowX: 'hidden', overflowY: 'hidden' }}>
+                <div style={{ minHeight: '100vh', marginTop: '80px' }}>
                     <div
                         style={{
                             display: 'block',
@@ -118,8 +118,8 @@ class SearchResult extends Component {
         }
         else {
             return (
-                <div style={{ minHeight: '100vh', marginTop: '80px', overflowX: 'hidden', overflowY: 'hidden' }}>
-                    <BoxContainer>
+                <div style={{ minHeight: '100vh', marginTop: '80px' }}>
+                    <BoxContainer style={{ padding: '8px' }}>
                         <Grid container spacing={16} style={{ marginBottom:'8px' }}>
                             <Grid item xs={12} sm={12} md={8}>
                                 <div style={styles.gridWrapper}>

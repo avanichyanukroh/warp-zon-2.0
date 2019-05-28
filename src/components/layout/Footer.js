@@ -14,7 +14,7 @@ const styles = {
 class Footer extends PureComponent {
     render() {
         return (
-            <div style={{ background: '#212121' }}>
+            <div style={{ background: '#212121', padding: '8px' }}>
                 <Grid container spacing={16} style={{ padding: '8px' }}>
 					<Grid item xs={12} sm={4} md={4}>
                     <a href="https://github.com/avanichyanukroh/warp-zone-2.0" rel="noopener noreferrer" target="_blank">

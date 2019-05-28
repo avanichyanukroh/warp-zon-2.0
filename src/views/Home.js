@@ -26,11 +26,11 @@ class Home extends Component {
         if (!popularGames || !newReleases) {
             return (
                 <div>
-                <ParallaxHero
-                    background={heroImage}
-                    height="500px"
-                    text="DISCOVER YOUR NEXT GAME"
-                />
+                    <ParallaxHero
+                        background={heroImage}
+                        height="500px"
+                        text="DISCOVER YOUR NEXT GAME"
+                    />
                 <div
 					style={{
 						display: 'block',
@@ -49,7 +49,7 @@ class Home extends Component {
         }
         else {
             return (
-                <div style={{ overflowX: 'hidden', overflowY: 'hidden' }}>
+                <div>
                     <ParallaxHero
                         background={heroImage}
                         height="500px"

@@ -154,7 +154,7 @@ class GameProfile extends Component {
         const { gameProfile } = this.props;
         if (!gameProfile) {
             return (
-                <div style={{ minHeight: '100vh', marginTop: '80px', overflowX: 'hidden', overflowY: 'hidden' }}>
+                <div style={{ minHeight: '100vh', marginTop: '80px' }}>
                     <div
                         style={{
                             display: 'block',
@@ -173,7 +173,7 @@ class GameProfile extends Component {
         }
         else {
             return (
-                <div style={{ minHeight: '100vh', marginTop: '80px', padding: '8px', overflowX: 'hidden', overflowY: 'hidden' }}>
+                <div style={{ minHeight: '100vh', marginTop: '80px', padding: '8px' }}>
                     <BoxContainer>
                         <Typography variant="h3" align="center">
                             <div className="header-text" style={styles.gameTitleHeader}>{gameProfile[0].name}</div>
@@ -252,11 +252,15 @@ class GameProfile extends Component {
                                                 style={styles.iFrame}
                                             >
                                             </iframe>
-                                            : <img
-                                                src={`https://images.igdb.com/igdb/image/upload/t_screenshot_med_2x/${gameProfile[0].screenshots[0].image_id}.jpeg`}
-                                                alt='game screenshot'
-                                                style={styles.iFrameAltImage}
-                                            />
+                                            : (
+                                                gameProfile[0].screenshots
+                                                ? <img
+                                                    src={`https://images.igdb.com/igdb/image/upload/t_screenshot_med_2x/${gameProfile[0].screenshots[0].image_id}.jpeg`}
+                                                    alt='game screenshot'
+                                                    style={styles.iFrameAltImage}
+                                                />
+                                                : <div style={{ height: '100%', width: '100%', color: 'lightgray', textAlign: 'center' }}>No video available</div>
+                                            )
                                     }
                                     
                                 </div>
@@ -272,7 +276,12 @@ class GameProfile extends Component {
                                 </div>
                                 <div style={{ marginBottom: '25px' }} />
                                 <SectionHeader title="Media" />
-                                <ImageCarousel items={gameProfile[0].screenshots} />
+                                {
+                                    gameProfile[0].screenshots
+                                    ? <ImageCarousel items={gameProfile[0].screenshots} />
+                                    : <div>No Media Currently Available</div>
+                                }
+                                
                             </div>
                             </Grid>
                             <Grid item xs={12} sm={4} md={4}>
@@ -356,12 +365,17 @@ class GameProfile extends Component {
                             </Grid>
                         </Grid>
                     </BoxContainer>
-                    <img
-                        src={`https://images.igdb.com/igdb/image/upload/t_1080p/${gameProfile[0].screenshots[0].image_id}.jpeg`}
-                        alt="breath of the wild background"
-                        style={styles.backgroundImage}
-                        className="fade-in"
-                    />
+                    {
+                        gameProfile[0].screenshots
+                        ? <img
+                            src={`https://images.igdb.com/igdb/image/upload/t_1080p/${gameProfile[0].screenshots[0].image_id}.jpeg`}
+                            alt="breath of the wild background"
+                            style={styles.backgroundImage}
+                            className="fade-in"
+                        />
+                        : null
+                    }
+                    
                     <div style={styles.backgroundOverlay} />
                 </div>
             );
