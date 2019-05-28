@@ -4,6 +4,7 @@ import PropTypes from 'prop-types';
 import Grid from '@material-ui/core/Grid';
 import { Typography } from '@material-ui/core';
 import { StarRate } from '@material-ui/icons';
+import { Link } from 'react-router-dom';
 
 const styles = {
     itemContainer: {
@@ -21,6 +22,12 @@ const styles = {
         objectFit: 'cover',
         width: '100%',
         height: '100%'
+    },
+    backgroundImageAlt: {
+        objectFit: 'cover',
+        width: '100%',
+        height: '100%',
+        background: 'linear-gradient(to bottom, #c31432, #240b36)'
     },
     itemDescriptionContainer: {
         position: 'absolute',
@@ -45,7 +52,8 @@ const styles = {
     starIcon: {
         position: 'relative',
         top: '10px',
-        left: 0
+        left: 0,
+        color: '#f9ca24'
     },
     smallFrameOverlay: {
         position: 'absolute',
@@ -114,7 +122,12 @@ class GridGalleryItem extends Component {
         return (
             <Grid item xs={xs} sm={sm} md={md} style={frame === 'large' ? styles.largeFrame : styles.smallFrame}>
                 <div style={styles.itemContainer} onMouseEnter={this.handleOnMouseEnter} onMouseLeave={this.handleOnMouseLeave}>
-                    <div style={styles.linkOverlay} />
+                    <Link
+                        to={`/game-profile?name=${item.name}&id=${item.id}`}
+                        style={{ textDecoration: 'none', color: 'black' }}
+                    >
+                        <div style={styles.linkOverlay} />
+                    </Link>
                     <div
                         style={
                             frame === 'large' 
@@ -122,30 +135,41 @@ class GridGalleryItem extends Component {
                             : (isActive ? styles.smallFrameOverlayActive : styles.smallFrameOverlay)
                         }
                     />
-                    <img
-                        src={`https://images.igdb.com/igdb/image/upload/t_screenshot_med_2x/${item.screenshots[0].image_id}.jpeg`}
-                        alt='game screenshot'
-                        style={styles.backgroundImage}
-                    />
+                    {
+                        item.screenshots
+                        ? <img
+                            src={`https://images.igdb.com/igdb/image/upload/t_screenshot_med_2x/${item.screenshots[0].image_id}.jpeg`}
+                            alt='game screenshot'
+                            style={styles.backgroundImage}
+                        />
+                        : <div style={styles.backgroundImageAlt} />
+                    }
                     <div style={styles.itemDescriptionContainer}>
                         <Typography variant="h6" style={styles.itemDescriptionText}>{item.name}</Typography>
                         <Grid container spacing={0} justify="space-between">
                             <Grid item xs={6} sm={6} md={6}>
-                                <Typography variant="subtitle1" style={styles.itemDescriptionText}>
-                                    {item.genres.map((genre, index) => {
+                                <Typography variant="caption" style={styles.itemDescriptionText}>
+                                    {item.genres.length <= 2
+                                    ? item.genres.map((genre, index) => {
                                         if (index === 0) {
                                             return genre.name;
                                         }
                                         else {
                                             return `, ${genre.name}`;
                                         }
-                                    })}
+                                    })
+                                    : `${item.genres[0].name}, ${item.genres[1].name}`
+                                }
                                 </Typography>
                             </Grid>
                             <Grid item xs={6} sm={6} md={6} style={{ textAlign: 'right' }}>
                                 <Typography variant="h6" style={styles.itemRatingValue}>
-                                    {(Math.floor(item.rating) / 10)}
-                                    <StarRate color="primary" fontSize="large" style={styles.starIcon} />
+                                {
+                                    item.rating
+                                    ? (Math.floor(item.rating) / 10)
+                                    : "NR"
+                                }
+                                    <StarRate fontSize="large" style={styles.starIcon} />
                                 </Typography>
                             </Grid>
                         </Grid>

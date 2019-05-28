@@ -1,15 +1,17 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import moment from 'moment';
+import queryString from 'query-string';
 
 import { Grid, Typography } from '@material-ui/core';
-import Spacer from '../components/common/Spacer';
 import BoxContainer from '../components/layout/BoxContainer';
-import backgroundImage from '../images/breath-of-the-wild-wallpaper.jpg';
 import { StarRate } from '@material-ui/icons';
 import Info from '../components/gameProfile/Info';
 import ImageCarousel from '../components/gallery/ImageCarousel';
 import SectionHeader from '../components/common/SectionHeader';
+import { ClipLoader } from 'react-spinners';
+
+import { loadGameProfile, getGameProfile } from '../redux/actions';
 
 const styles = {
     gridWrapperCover: {
@@ -24,13 +26,13 @@ const styles = {
         padding: '16px',
         boxShadow: '0 0 1px gray'
     },
-    headerUnderline: {
-        background: 'linear-gradient(to right, #009fff, #ec2f4b)',
-        height: '3px',
-        width: '185px',
-        display: 'inline-block',
-        marginBottom: '8px',
-        borderRadius: '15px'
+    gameTitleHeader: {
+        color: 'white',
+        fontWeight: 600,
+        padding: '8px',
+        textAlign: 'center',
+        textShadow: '4px 4px 5px black',
+        margin: '0 auto 16px'
     },
     iFrameContainer: {
         position: 'relative',
@@ -50,15 +52,26 @@ const styles = {
         height: '100%'
     },
     backgroundImage: {
-        position: "absolute",
+        position: 'absolute',
         top: 0,
         left: 0,
         zIndex: '-10',
         width: '100%',
         backgroundSize: 'cover',
         backgroundPosition: 'center center',
-        WebkitMaskImage:'-webkit-gradient(linear, left top, left bottom, from(rgba(0,0,0,0.5)), to(rgba(0,0,0,0)))',
-        maskImage: 'linear-gradient(to bottom, rgba(0,0,0,0.5), rgba(0,0,0,0))'
+        WebkitMaskImage:'-webkit-gradient(linear, left top, left bottom, from(rgba(0,0,0,1)), to(rgba(0,0,0,0)))',
+        maskImage: 'linear-gradient(to bottom, rgba(0,0,0,1), rgba(0,0,0,0))'
+    },
+    backgroundOverlay: {
+        position: 'absolute',
+        top: 0,
+        left: 0,
+        zIndex: '-9',
+        width: '100%',
+        height: '100%',
+        backgroundSize: 'cover',
+        backgroundPosition: 'center center',
+        background: 'linear-gradient(to bottom, rgba(0,0,0,0.7), rgba(0,0,0,0))'
     },
     gameCoverContainer: {
         position: 'relative',
@@ -92,7 +105,8 @@ const styles = {
         position: 'relative',
         top: '10px',
         left: 0,
-        fontSize: '40'
+        fontSize: '40',
+        color: '#f9ca24'
     },
     resultText : {
         fontSize: '14px',
@@ -101,6 +115,11 @@ const styles = {
     ageRatingImage: {
         height: '120px',
         widght: 'auto'
+    },
+    iFrameAltImage: {
+        objectFit: 'cover',
+        width: '100%',
+        height: '100%'
     }
 }
 
@@ -121,472 +140,237 @@ const ageRatingURL = {
 
 class GameProfile extends Component {
 
+    componentDidMount() {
+        const parsed = queryString.parse(this.props.location.search);
+        const gameId = parsed.id;
+        this.props.dispatch(getGameProfile(gameId));
+    }
+
+    componentWillUnmount() {
+        this.props.dispatch(loadGameProfile(null));
+    }
+
     render() {
         const { gameProfile } = this.props;
-
-        return (
-            <div style={{ minHeight: '100vh', marginTop: '80px' }}>
-                <BoxContainer>
-                    <Typography variant="h3" align="left">
-                        <b>The Legend of Zelda: Breath of the Wild</b>
-                    </Typography>
+        if (!gameProfile) {
+            return (
+                <div style={{ minHeight: '100vh', marginTop: '80px', overflowX: 'hidden', overflowY: 'hidden' }}>
                     <div
-                        style={styles.headerUnderline}
-                    />
-                    <Spacer />
-                    <Grid container spacing={16} style={{ marginBottom: '8px' }}>
-                        <Grid item xs={12} sm={3} md={3}>
-                            <div style={styles.gridWrapperCover}>
-                                <div style={styles.gameCoverContainer}>
-                                    <img
-                                        src={`https://images.igdb.com/igdb/image/upload/t_cover_big/${gameProfile[0].cover.image_id}.jpg`}
-                                        alt="game cover"
-                                        style={styles.gameCoverImage}
-                                    />
+                        style={{
+                            display: 'block',
+                            margin: '20px auto',
+                            textAlign: 'center'
+                        }}
+                    >
+                        <ClipLoader
+                            sizeUnit={"px"}
+                            size={36}
+                            color={'#4547E6'}
+                        />
+                    </div>
+                </div>
+            );
+        }
+        else {
+            return (
+                <div style={{ minHeight: '100vh', marginTop: '80px', padding: '8px', overflowX: 'hidden', overflowY: 'hidden' }}>
+                    <BoxContainer>
+                        <Typography variant="h3" align="center">
+                            <div className="header-text" style={styles.gameTitleHeader}>{gameProfile[0].name}</div>
+                        </Typography>
+                        <Grid container spacing={16} style={{ marginBottom: '8px' }}>
+                            <Grid item xs={12} sm={3} md={3}>
+                                <div style={styles.gridWrapperCover}>
+                                    <div style={styles.gameCoverContainer}>
+                                        <img
+                                            src={`https://images.igdb.com/igdb/image/upload/t_cover_big/${gameProfile[0].cover.image_id}.jpg`}
+                                            alt="game cover"
+                                            style={styles.gameCoverImage}
+                                        />
+                                    </div>
+                                    <div style={styles.gameCoverDescriptionContainer}>
+                                        <Typography variant="body1" style={styles.itemRatingValue}>
+                                        {
+                                            gameProfile[0].rating
+                                            ? (Math.floor(gameProfile[0].rating) / 10)
+                                            : "NR"
+                                        }
+                                            <StarRate style={styles.starIcon} />
+                                        </Typography>
+                                        <div style={styles.resultText}>
+                                            <b>Genre: </b>
+                                            {gameProfile[0].genres.map((genre, index) => {
+                                                if (index === 0) {
+                                                    return <span key={index}>{genre.name}</span>
+                                                }
+                                                else {
+                                                    return <span key={index}>, {genre.name}</span>
+                                                }
+                                            })}
+                                        </div>
+                                        <div style={styles.resultText}>
+                                            <b>Platform: </b>
+                                            {gameProfile[0].platforms.map((platform, index) => {
+                                                if ((gameProfile[0].platforms.length - 1) === index) {
+                                                    return (
+                                                        <span
+                                                            key={index}
+                                                        >
+                                                            {platform.abbreviation}
+                                                        </span>
+                                                    )
+                                                }
+                                                else {
+                                                    return (
+                                                        <span
+                                                            key={index}
+                                                        >
+                                                            {platform.abbreviation},&nbsp;
+                                                        </span>
+                                                    )
+                                                }
+                                                
+                                            })}
+                                        </div>
+                                        <div style={styles.resultText}>
+                                            <b>Release Date: </b>
+                                            <span>{moment.unix(gameProfile[0].first_release_date).format('MMMM Do YYYY')}</span>
+                                        </div>
+                                    </div>
                                 </div>
-                                <div style={styles.gameCoverDescriptionContainer}>
-                                    <Typography variant="body1" style={styles.itemRatingValue}>
-                                        {(Math.floor(gameProfile[0].rating) / 10)}
-                                        <StarRate color="primary" style={styles.starIcon} />
-                                    </Typography>
-                                    <div style={styles.resultText}>
-                                        <b>Genre: </b>
-                                        {gameProfile[0].genres.map((genre, index) => {
-                                            if (index === 0) {
-                                                return <span>{genre.name}</span>
-                                            }
-                                            else {
-                                                return <span>, {genre.name}</span>
-                                            }
-                                        })}
-                                    </div>
-                                    <div style={styles.resultText}>
-                                        <b>Platform: </b>
-                                        {gameProfile[0].platforms.map((platform, index) => {
-                                            if ((gameProfile[0].platforms.length - 1) === index) {
-                                                return (
-                                                    <span
-                                                        key={index}
-                                                    >
-                                                        {platform.abbreviation}
-                                                    </span>
-                                                )
-                                            }
-                                            else {
-                                                return (
-                                                    <span
-                                                        key={index}
-                                                    >
-                                                        {platform.abbreviation},&nbsp;
-                                                    </span>
-                                                )
-                                            }
-                                            
-                                        })}
-                                    </div>
-                                    <div style={styles.resultText}>
-                                        <b>Release Date: </b>
-                                        <span>{moment(gameProfile[0].first_release_date).format('MMMM Do YYYY')}</span>
-                                    </div>
+                            </Grid>
+                            <Grid item xs={12} sm={9} md={9}>
+                                <div style={styles.iFrameContainer}>
+                                    {
+                                        gameProfile[0].videos
+                                            ? <iframe 
+                                                title="breath of the wild"
+                                                allowFullScreen="allowfullscreen"
+                                                src={`https://www.youtube.com/embed/${gameProfile[0].videos[0].video_id}?autoplay=1&mute=1`}
+                                                frameBorder="0"
+                                                autoFocus
+                                                style={styles.iFrame}
+                                            >
+                                            </iframe>
+                                            : <img
+                                                src={`https://images.igdb.com/igdb/image/upload/t_screenshot_med_2x/${gameProfile[0].screenshots[0].image_id}.jpeg`}
+                                                alt='game screenshot'
+                                                style={styles.iFrameAltImage}
+                                            />
+                                    }
+                                    
                                 </div>
-                            </div>
+                            </Grid>
                         </Grid>
-                        <Grid item xs={12} sm={9} md={9}>
-                            <div style={styles.iFrameContainer}>
-                                <iframe 
-                                    title="breath of the wild"
-                                    allowFullScreen="allowfullscreen"
-                                    src="https://www.youtube.com/embed/zw47_q9wbBE?autoplay=1&mute=1"
-                                    frameBorder="0"
-                                    autoFocus
-                                    style={styles.iFrame}
-                                >
-                                </iframe>
-                            </div>
-                        </Grid>
-                    </Grid>
-                    <Grid container spacing={16}>
-                        <Grid item xs={12} sm={8} md={8}>
-                        <div style={styles.gridWrapper}>
-                            <div style={styles.resultText}>
-                                {gameProfile[0].summary.split('\n').map((item, key) => {
-                                    return <span key={key}>{item}<br/></span>
-                                })}
-                            </div>
-                            <Spacer />
-                            <SectionHeader title="Media" />
-                            <ImageCarousel items={gameProfile[0].screenshots} />
-                        </div>
-                        </Grid>
-                        <Grid item xs={12} sm={4} md={4}>
+                        <Grid container spacing={16}>
+                            <Grid item xs={12} sm={8} md={8}>
                             <div style={styles.gridWrapper}>
-                                <Info name="Developers" result={gameProfile[0].involved_companies[0].company.name} />
-                                <Info name="Player Perspective" results={gameProfile[0].player_perspectives} />
-                                <Info name="Game Modes" results={gameProfile[0].game_modes} />
-                                <Info name="Genres" results={gameProfile[0].genres} />
-                                <Info name="Themes" results={gameProfile[0].themes} />
-                                <Info name="Game Engine" results={gameProfile[0].game_engines} />
-                                <Info name="Series" result={gameProfile[0].collection.name} />
-                                {/* <Info name="Franchise" result={gameProfile[0].franchise.name} /> */}
-                                <Grid container spacing={16}>
-                                    <Grid item xs={6} sm={6} md={6}>
-                                        <div style={styles.resultText}>
-                                            <b>Release Dates: </b>
-                                        </div>
-                                    </Grid>
-                                    <Grid item xs={6} sm={6} md={6}>
-                                        {gameProfile[0].release_dates.map((releaseDate, index) => (
-                                            <div style={styles.resultText} key={index}>
-                                                <span>{moment(releaseDate.date).format('MMM Do YYYY')} - {releaseDate.platform.abbreviation}</span>
-                                            </div>
-                                        ))}
-                                    </Grid>
-                                </Grid>
-                                <Grid container spacing={16}>
-                                    <Grid item xs={6} sm={6} md={6}>
-                                        <div style={styles.resultText}>
-                                            <b>Age Rating: </b>
-                                        </div>
-                                    </Grid>
-                                    <Grid item xs={6} sm={6} md={6}>
-                                        {gameProfile[0].age_ratings.map((age_rating, index) => (
-                                            <div style={styles.resultText} key={index}>
-                                                <img src={ageRatingURL[age_rating.rating]} alt="Age Rating" style={styles.ageRatingImage} />
-                                            </div>
-                                        ))}
-                                    </Grid>
-                                </Grid>
+                                <div style={styles.resultText}>
+                                    {gameProfile[0].summary.split('\n').map((item, key) => {
+                                        return <span key={key}>{item}<br/></span>
+                                    })}
+                                </div>
+                                <div style={{ marginBottom: '25px' }} />
+                                <SectionHeader title="Media" />
+                                <ImageCarousel items={gameProfile[0].screenshots} />
                             </div>
+                            </Grid>
+                            <Grid item xs={12} sm={4} md={4}>
+                                <div style={styles.gridWrapper}>
+                                    <Info
+                                        name="Developers"
+                                        result={gameProfile[0].involved_companies
+                                            ? gameProfile[0].involved_companies[0].company.name
+                                            : 'Unavailable'}
+                                    />
+                                    <Info
+                                        name="Player Perspective"
+                                        results={gameProfile[0].player_perspectives
+                                            ? gameProfile[0].player_perspectives
+                                            : [{name: 'Unavailable'}]}
+                                    />
+                                    <Info
+                                        name="Game Modes"
+                                        results={gameProfile[0].game_modes
+                                            ? gameProfile[0].game_modes
+                                            : [{name: 'Unavailable'}]}
+                                    />
+                                    <Info
+                                        name="Genres"
+                                        results={gameProfile[0].genres
+                                            ? gameProfile[0].genres
+                                            : [{name: 'Unavailable'}]}
+                                    />
+                                    <Info
+                                        name="Themes"
+                                        results={gameProfile[0].themes
+                                            ? gameProfile[0].themes
+                                            : [{name: 'Unavailable'}]}
+                                    />
+                                    <Info
+                                        name="Game Engine"
+                                        results={gameProfile[0].game_engines
+                                            ? gameProfile[0].game_engines
+                                            : [{name: 'Unavailable'}]}
+                                    />
+                                    <Info
+                                        name="Series"
+                                        result={gameProfile[0].collection
+                                            ? gameProfile[0].collection.name
+                                            : 'None'}
+                                    />
+                                    {/* <Info name="Franchise" result={gameProfile[0].franchise.name} /> */}
+                                    <Grid container spacing={16}>
+                                        <Grid item xs={6} sm={6} md={6}>
+                                            <div style={styles.resultText}>
+                                                <b>Release Dates: </b>
+                                            </div>
+                                        </Grid>
+                                        <Grid item xs={6} sm={6} md={6}>
+                                            {gameProfile[0].release_dates.map((releaseDate, index) => (
+                                                <div style={styles.resultText} key={index}>
+                                                    <span>{moment.unix(releaseDate.date).format('MMM Do YYYY')} - {releaseDate.platform.abbreviation}</span>
+                                                </div>
+                                            ))}
+                                        </Grid>
+                                    </Grid>
+                                    <Grid container spacing={16}>
+                                        <Grid item xs={6} sm={6} md={6}>
+                                            <div style={styles.resultText}>
+                                                <b>Age Rating: </b>
+                                            </div>
+                                        </Grid>
+                                        <Grid item xs={6} sm={6} md={6}>
+                                            {gameProfile[0].age_ratings
+                                            ? gameProfile[0].age_ratings.map((age_rating, index) => (
+                                                <div style={styles.resultText} key={index}>
+                                                    <img src={ageRatingURL[age_rating.rating]} alt="Age Rating" style={styles.ageRatingImage} />
+                                                </div>
+                                            ))
+                                            : <div style={styles.resultText}>
+                                            <img src={ageRatingURL[6]} alt="Age Rating" style={styles.ageRatingImage} />
+                                        </div>}
+                                        </Grid>
+                                    </Grid>
+                                </div>
+                            </Grid>
                         </Grid>
-                    </Grid>
-                </BoxContainer>
-                <img
-                    src={backgroundImage}
-                    alt="breath of the wild background"
-                    style={styles.backgroundImage}
-                />
-            </div>
-        );
+                    </BoxContainer>
+                    <img
+                        src={`https://images.igdb.com/igdb/image/upload/t_1080p/${gameProfile[0].screenshots[0].image_id}.jpeg`}
+                        alt="breath of the wild background"
+                        style={styles.backgroundImage}
+                        className="fade-in"
+                    />
+                    <div style={styles.backgroundOverlay} />
+                </div>
+            );
+        }
     }
 }
 
 const mapStateToProps = state => ({
-    gameProfile: [
-        {
-            "id": 112916,
-            "age_ratings": [
-                {
-                    "id": 23688,
-                    "rating": 6
-                },
-                {
-                    "id": 23691,
-                    "rating": 5
-                }
-            ],
-            "aggregated_rating": 81.2727272727273,
-            "aggregated_rating_count": 15,
-            "alternative_names": [
-                23479
-            ],
-            "artworks": [
-                6401,
-                6722,
-                6723,
-                7181
-            ],
-            "category": 0,
-            "collection": {
-                "id": 22,
-                "name": "Mortal Kombat"
-            },
-            "cover": {
-                "id": 70935,
-                "image_id": "co1iqf"
-            },
-            "created_at": 1543881600,
-            "external_games": [
-                1686154,
-                1698319
-            ],
-            "first_release_date": 1555977600,
-            "game_engines": [
-                {
-                    "id": 351,
-                    "name": "Unreal Engine 3"
-                }
-            ],
-            "game_modes": [
-                {
-                    "id": 1,
-                    "name": "Single player"
-                },
-                {
-                    "id": 2,
-                    "name": "Multiplayer"
-                }
-            ],
-            "genres": [
-                {
-                    "id": 4,
-                    "name": "Fighting"
-                }
-            ],
-            "hypes": 8,
-            "involved_companies": [
-                {
-                    "id": 77358,
-                    "company": {
-                        "id": 48,
-                        "name": "NetherRealm Studios"
-                    }
-                },
-                {
-                    "id": 77359,
-                    "company": {
-                        "id": 2546,
-                        "name": "Shiver Games"
-                    }
-                },
-                {
-                    "id": 77360,
-                    "company": {
-                        "id": 14055,
-                        "name": "Warner Bros. Interactive Entertainment"
-                    }
-                }
-            ],
-            "keywords": [
-                109,
-                1308
-            ],
-            "name": "Mortal Kombat 11",
-            "platforms": [
-                {
-                    "id": 6,
-                    "abbreviation": "PC"
-                },
-                {
-                    "id": 48,
-                    "abbreviation": "PS4"
-                },
-                {
-                    "id": 49,
-                    "abbreviation": "XONE"
-                },
-                {
-                    "id": 130,
-                    "abbreviation": "switch"
-                }
-            ],
-            "player_perspectives": [
-                {
-                    "id": 4,
-                    "name": "Side view"
-                }
-            ],
-            "popularity": 1616.663442375351,
-            "pulse_count": 811,
-            "rating": 79.8042214128625,
-            "rating_count": 15,
-            "release_dates": [
-                {
-                    "id": 161924,
-                    "date": 1555977600,
-                    "platform": {
-                        "id": 48,
-                        "abbreviation": "PS4"
-                    }
-                },
-                {
-                    "id": 161925,
-                    "date": 1555977600,
-                    "platform": {
-                        "id": 49,
-                        "abbreviation": "XONE"
-                    }
-                },
-                {
-                    "id": 161926,
-                    "date": 1555977600,
-                    "platform": {
-                        "id": 6,
-                        "abbreviation": "PC"
-                    }
-                },
-                {
-                    "id": 161937,
-                    "date": 1555977600,
-                    "platform": {
-                        "id": 130,
-                        "abbreviation": "switch"
-                    }
-                }
-            ],
-            "screenshots": [
-                {
-                    "id": 268601,
-                    "image_id": "sc5r95"
-                },
-                {
-                    "id": 268602,
-                    "image_id": "sc5r96"
-                },
-                {
-                    "id": 268603,
-                    "image_id": "sc5r97"
-                },
-                {
-                    "id": 268604,
-                    "image_id": "sc5r98"
-                },
-                {
-                    "id": 268605,
-                    "image_id": "sc5r99"
-                },
-                {
-                    "id": 268606,
-                    "image_id": "sc5r9a"
-                },
-                {
-                    "id": 268607,
-                    "image_id": "sc5r9b"
-                },
-                {
-                    "id": 298938,
-                    "image_id": "sc6enu"
-                },
-                {
-                    "id": 298939,
-                    "image_id": "sc6env"
-                },
-                {
-                    "id": 298940,
-                    "image_id": "sc6enw"
-                },
-                {
-                    "id": 298941,
-                    "image_id": "sc6enx"
-                },
-                {
-                    "id": 298942,
-                    "image_id": "sc6eny"
-                }
-            ],
-            "similar_games": [
-                {
-                    "id": 54775,
-                    "cover": 68196,
-                    "first_release_date": 1535587200,
-                    "name": "Shadows: Awakening",
-                    "rating": 48.5714285714286
-                },
-                {
-                    "id": 56967,
-                    "cover": 29725,
-                    "first_release_date": 1508198400,
-                    "name": "Game of Thrones: Conquest",
-                    "rating": 90
-                },
-                {
-                    "id": 76064,
-                    "cover": 69213,
-                    "first_release_date": 1546214400,
-                    "name": "KurtzPel"
-                },
-                {
-                    "id": 96217,
-                    "cover": 72919,
-                    "first_release_date": 1551744000,
-                    "name": "Eternity: The Last Unicorn",
-                    "rating": 60
-                },
-                {
-                    "id": 101608,
-                    "cover": 69296,
-                    "first_release_date": 1529366400,
-                    "name": "ANIMA: GATE OF MEMORIES - THE NAMELESS CHRONICLES",
-                    "rating": 60
-                },
-                {
-                    "id": 103282,
-                    "cover": 69738,
-                    "first_release_date": 1577750400,
-                    "name": "Sekiro: Shadows Die Twice - Collector's Edition"
-                },
-                {
-                    "id": 103288,
-                    "cover": 69084,
-                    "first_release_date": 1550188800,
-                    "name": "Jump Force",
-                    "rating": 41.4285714285714
-                },
-                {
-                    "id": 103369,
-                    "cover": 66496,
-                    "first_release_date": 1564012800,
-                    "name": "Kill la Kill the Game: If"
-                },
-                {
-                    "id": 106987,
-                    "cover": 67685,
-                    "first_release_date": 1577750400,
-                    "name": "Torchlight Frontiers"
-                },
-                {
-                    "id": 112589,
-                    "cover": 71463,
-                    "first_release_date": 1552521600,
-                    "name": "Blade Arcus Rebellion from Shining"
-                }
-            ],
-            "slug": "mortal-kombat-11",
-            "summary": "Mortal Kombat is back and better than ever in the next evolution of the iconic franchise. \n \nThe all new Custom Character Variations give you unprecedented control of your fighters to make them your own. The new graphics engine showcases every skull-shattering, eye-popping moment, bringing you so close to the fight you can feel it. Featuring a roster of new and returning Klassic Fighters, Mortal Kombat's best-in-class cinematic story mode continues the epic saga over 25 years in the making.",
-            "tags": [
-                1,
-                17,
-                268435460,
-                536871021,
-                536872220
-            ],
-            "themes": [
-                {
-                    "id": 1,
-                    "name": "Action"
-                },
-                {
-                    "id": 17,
-                    "name": "Fantasy"
-                }
-            ],
-            "total_rating": 80.5384743427949,
-            "total_rating_count": 30,
-            "updated_at": 1558310400,
-            "url": "https://www.igdb.com/games/mortal-kombat-11",
-            "videos": [
-                23616,
-                24253,
-                24254,
-                24255,
-                24256,
-                24257,
-                24961,
-                25300,
-                25655,
-                25747,
-                25790,
-                25801
-            ],
-            "websites": [
-                95220,
-                95221,
-                95222,
-                95223,
-                95224,
-                98300
-            ]
-        }
-    ]
+    gameProfile: state.gameProfile
 });
 
 export default connect(mapStateToProps)(GameProfile);

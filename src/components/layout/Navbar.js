@@ -1,23 +1,26 @@
 import React from 'react';
 import PropTypes from 'prop-types';
+import { connect } from 'react-redux';
 
 import AppBar from '@material-ui/core/AppBar';
 import Toolbar from '@material-ui/core/Toolbar';
 import IconButton from '@material-ui/core/IconButton';
 import Typography from '@material-ui/core/Typography';
 import InputBase from '@material-ui/core/InputBase';
-import Badge from '@material-ui/core/Badge';
 import MenuItem from '@material-ui/core/MenuItem';
 import Menu from '@material-ui/core/Menu';
 import { fade } from '@material-ui/core/styles/colorManipulator';
 import { withStyles } from '@material-ui/core/styles';
-import MenuIcon from '@material-ui/icons/Menu';
 import SearchIcon from '@material-ui/icons/Search';
 import AccountCircle from '@material-ui/icons/AccountCircle';
-import MailIcon from '@material-ui/icons/Mail';
-import NotificationsIcon from '@material-ui/icons/Notifications';
 import MoreIcon from '@material-ui/icons/MoreVert';
 import Button from '@material-ui/core/Button';
+import { Link } from 'react-router-dom';
+import { Redirect } from 'react-router';
+import Modal from '@material-ui/core/Modal';
+import navbarLogo from '../../images/navbar-logo.png';
+
+import { getGameSearchResults } from '../../redux/actions';
 
 const styles = theme => ({
 	root: {
@@ -26,16 +29,14 @@ const styles = theme => ({
 	grow: {
 		flexGrow: 1,
 	},
-	// menuButton: {
-	// 	marginLeft: -12,
-	// 	marginRight: 20,
-	// },
-	title: {
-		display: 'none',
-		[theme.breakpoints.up('sm')]: {
-			display: 'block',
-		},
-	},
+	paper: {
+        position: 'absolute',
+        width: 400,
+        backgroundColor: theme.palette.background.paper,
+        boxShadow: theme.shadows[5],
+        // padding: theme.spacing(4),
+        outline: 'none',
+      },
 	search: {
 		position: 'relative',
 		borderRadius: theme.shape.borderRadius,
@@ -44,7 +45,7 @@ const styles = theme => ({
 			backgroundColor: fade(theme.palette.common.white, 0.25),
 		},
 		marginRight: theme.spacing.unit * 2,
-		marginLeft: 0,
+        marginLeft: '13px',
 		width: '100%',
 		[theme.breakpoints.up('sm')]: {
 			marginLeft: theme.spacing.unit * 3,
@@ -52,7 +53,7 @@ const styles = theme => ({
 		},
 	},
 	searchIcon: {
-		width: theme.spacing.unit * 9,
+		width: '50px',
 		height: '100%',
 		position: 'absolute',
 		pointerEvents: 'none',
@@ -68,7 +69,7 @@ const styles = theme => ({
 		paddingTop: theme.spacing.unit,
 		paddingRight: theme.spacing.unit,
 		paddingBottom: theme.spacing.unit,
-		paddingLeft: theme.spacing.unit * 10,
+        paddingLeft: '50px',
 		transition: theme.transitions.create('width'),
 		width: '100%',
 		[theme.breakpoints.up('md')]: {
@@ -92,7 +93,10 @@ const styles = theme => ({
 class Navbar extends React.Component {
 	state = {
 		anchorEl: null,
-		mobileMoreAnchorEl: null,
+        mobileMoreAnchorEl: null,
+        searchQuery: '',
+        redirectToSearchResults: false,
+        isSignedIn: false
 	};
 
 	handleProfileMenuOpen = event => {
@@ -112,8 +116,37 @@ class Navbar extends React.Component {
 		this.setState({ mobileMoreAnchorEl: null });
 	};
 
+    handleInputChange = event => {
+		this.setState({
+			searchQuery: event.target.value
+		})
+    };
+
+    handleOnSubmit = event => {
+        event.preventDefault();
+        this.props.dispatch(getGameSearchResults(this.state.searchQuery, 25));
+        this.setState({
+            redirectToSearchResults: true
+        });
+    }
+    
+    handleRedirectToSearchResults = () => {
+        if (this.state.redirectToSearchResults) {
+            this.setState({redirectToSearchResults: false})
+            return <Redirect to={`/search-results?search=${this.state.searchQuery}`} />
+        }
+    }
+
+    handleOpen = () => {
+        this.setState({isSignedIn: true});
+      };
+    
+    handleClose = () => {
+        this.setState({isSignedIn: false});
+      };
+
 	render() {
-		const { anchorEl, mobileMoreAnchorEl } = this.state;
+		const { anchorEl, mobileMoreAnchorEl, searchQuery, isSignedIn } = this.state;
 		const { classes } = this.props;
 		const isMenuOpen = Boolean(anchorEl);
 		const isMobileMenuOpen = Boolean(mobileMoreAnchorEl);
@@ -127,7 +160,6 @@ class Navbar extends React.Component {
 				onClose={this.handleMenuClose}
 			>
 				<MenuItem onClick={this.handleMenuClose}>Profile</MenuItem>
-				{/* <MenuItem onClick={this.handleMenuClose}>My account</MenuItem> */}
 			</Menu>
 		);
 
@@ -139,87 +171,98 @@ class Navbar extends React.Component {
 				open={isMobileMenuOpen}
 				onClose={this.handleMenuClose}
 			>
-				{/* <MenuItem onClick={this.handleMobileMenuClose}>
-					<IconButton color="inherit">
-						<Badge badgeContent={4} color="secondary">
-							<MailIcon />
-						</Badge>
-					</IconButton>
-					<p>Messages</p>
-				</MenuItem>
-				<MenuItem onClick={this.handleMobileMenuClose}>
-					<IconButton color="inherit">
-						<Badge badgeContent={11} color="secondary">
-							<NotificationsIcon />
-						</Badge>
-					</IconButton>
-					<p>Notifications</p>
-                </MenuItem> */}
                 <MenuItem onClick={this.handleProfileMenuOpen}>
-					<IconButton color="inherit">
-						<AccountCircle />
-					</IconButton>
-					<p>Sign in</p>
-				</MenuItem>
-				<MenuItem onClick={this.handleProfileMenuOpen}>
-					<IconButton color="inherit">
-						<AccountCircle />
-					</IconButton>
-					<p>Profile</p>
-				</MenuItem>
+                    <IconButton color="inherit">
+                        <AccountCircle />
+                    </IconButton>
+                    <p>Sign in</p>
+                </MenuItem>
+                <MenuItem onClick={this.handleProfileMenuOpen}>
+                    <IconButton color="inherit">
+                        <AccountCircle />
+                    </IconButton>
+                    <p>Profile</p>
+                </MenuItem>
 			</Menu>
 		);
-
+        
 		return (
 			<div className={classes.root}>
-				<AppBar position="fixed">
+                {this.handleRedirectToSearchResults()}
+				<AppBar position="fixed" style={{background: '#2C3A47'}}>
 					<Toolbar variant="dense">
-						{/* <IconButton className={classes.menuButton} color="inherit" aria-label="Open drawer">
-							<MenuIcon />
-						</IconButton> */}
-						<Typography className={classes.title} variant="h6" color="inherit" noWrap>
-							WarpZone
-						</Typography>
+                        <Link to="/" style={{ textDecoration: 'none', color: 'white', marginTop: 'auto' }}>
+                            <img
+                                src={navbarLogo}
+                                alt="navbar logo"
+                                style={{
+                                    height: '30px',
+                                    width: 'auto',
+                                    marginRight: '4px',
+                                    position: 'relative',
+                                    top: '-4px'
+                                }}
+                            />
+                        </Link>
 						<div className={classes.search}>
 							<div className={classes.searchIcon}>
 								<SearchIcon />
 							</div>
+                            <form onSubmit={this.handleOnSubmit}>
 							<InputBase
 								placeholder="Search For Video Game…"
 								classes={{
 									root: classes.inputRoot,
 									input: classes.inputInput,
-								}}
+                                }}
+                                value={searchQuery}
+                                onChange={this.handleInputChange}
 							/>
+                            </form>
 						</div>
 						<div className={classes.grow} />
 						<div className={classes.sectionDesktop}>
-							{/* <IconButton color="inherit">
-								<Badge badgeContent={4} color="secondary">
-									<MailIcon />
-								</Badge>
-							</IconButton>
-							<IconButton color="inherit">
-								<Badge badgeContent={17} color="secondary">
-									<NotificationsIcon />
-								</Badge>
-                            </IconButton> */}
-                            <Button style={{color: 'white' }}>Sign in</Button>
+                            <Button style={{color: 'white' }} onClick={this.handleOpen}>Sign in</Button>
 							<IconButton
 								aria-owns={isMenuOpen ? 'material-appbar' : undefined}
 								aria-haspopup="true"
-								onClick={this.handleProfileMenuOpen}
+								onClick={this.handleOpen}
 								color="inherit"
 							>
 								<AccountCircle />
 							</IconButton>
 						</div>
 						<div className={classes.sectionMobile}>
-							<IconButton aria-haspopup="true" onClick={this.handleMobileMenuOpen} color="inherit">
+							<IconButton aria-haspopup="true" onClick={this.handleOpen} color="inherit">
 								<MoreIcon />
 							</IconButton>
 						</div>
 					</Toolbar>
+                    <Modal
+                        aria-labelledby="simple-modal-title"
+                        aria-describedby="simple-modal-description"
+                        open={isSignedIn}
+                        onClose={this.handleClose}
+                        
+                    >
+                        <div
+                            className={classes.paper}
+                            style={{
+                                borderRadius: '3px',
+                                left: '50%',
+                                top: '25%',
+                                transform: 'Translate(-50%, -50%)',
+                                padding: '16px'
+                            }}
+                        >
+                            <Typography variant="h6" id="modal-title" align="center">
+                                Personal Profile
+                            </Typography>
+                            <Typography variant="subtitle1" id="simple-modal-description" align="center">
+                                Coming Soon!
+                            </Typography>
+                        </div>
+                    </Modal>
 				</AppBar>
 				{renderMenu}
 				{renderMobileMenu}
@@ -228,8 +271,12 @@ class Navbar extends React.Component {
 	}
 }
 
+const mapStateToProps = state => ({
+
+});
+
 Navbar.propTypes = {
 	classes: PropTypes.object.isRequired,
 };
 
-export default withStyles(styles)(Navbar);
+export default connect(mapStateToProps)(withStyles(styles)(Navbar));

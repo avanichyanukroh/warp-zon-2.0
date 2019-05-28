@@ -1,9 +1,7 @@
 import React, { PureComponent } from 'react';
-import moment from 'moment';
 // import PropTypes from 'prop-types';
 
 import { Carousel as ResponsiveCarousel } from 'react-responsive-carousel';
-import { Typography, Grid, Hidden } from '@material-ui/core';
 
 import 'react-responsive-carousel/lib/styles/carousel.min.css';
 import './Carousel.css';
@@ -27,7 +25,6 @@ class ImageCarousel extends PureComponent {
 				showThumbs={true}
                 showStatus={false}
                 showIndicators={false}
-                thumbWidth="30px"
 				className="presentation-mode"
 			>
                 {items.map((item, index) => (
