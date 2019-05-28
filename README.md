@@ -1,6 +1,12 @@
 # Warp Zone 2.0
 
-An application for users to research their next video game of interest along with their current sale prices.
+An application for users to research their next video game of interest along with their current sale prices.  
+
+This is a ongoing rebuild of the original Warp Zone site. Checkout what features will be coming out next at [Future Implementations](#future-implementations).  
+
+See original GitHub via the link below.  
+
+Original Warp Zone GitHub: <https://github.com/avanichyanukroh/warp-zone>
 
 ## Motivation
 
@@ -8,41 +14,37 @@ Tired of playing the same game or simply just looking for a great video game to 
 
 ## Screenshots
 
-Registeration Page:
+Landing Page Hero Section:
 
-![registeration page](screenshots/registeration-page.png)
+![landing page hero section](screenshots/landing-page-hero.png)
 
-Login Page:
+Landing Page Popular Games:
 
-![login page](screenshots/login-page.png)
+![landing page popular games](screenshots/landing-page-popular-games.png)
 
-Landing Page:
+Landing Page New Releases:
 
-![landing page](screenshots/landing-page.png)
+![landing page new releases](screenshots/landing-page-new-releases.png)
 
-Search Results Page:
+Search Results:
 
-![search results page](screenshots/search-results-page.png)
+![search results](screenshots/search-results.png)
 
-Game Profile Page:
+Game Profile:
 
-![game profile page](screenshots/game-profile-page.png)
+![game profile](screenshots/game-profile-header.png)
 
-Game Profile Page (Price List Section):
+Game Profile Info:
 
-![game profile page price list section](screenshots/game-profile-page-2.png)
+![game profile info](screenshots/game-profile-info.png)
 
 User Profile Page:
 
 ![user profile page](screenshots/user-profile-page.png)
 
-Mobile Landing Page:
+Mobile View:
 
-![mobile landing page](screenshots/landing-page-mobile.png)
-
-Mobile User Profile Page:
-
-![mobile user profile page](screenshots/user-profile-page-mobile.png)
+![mobile view](screenshots/mobile-search-results.png)
 
 ## Demo
 
@@ -65,14 +67,18 @@ Log in with a preexisting demo account listed above to try out a personal profil
 ## Features
 
 * Search video games by title.
-* Popular games currently slider.
-* Soon to release games slider (randomized platform).
-* Price comparison section per game profile.
-* Personal and customizable user profile.
-* Add and delete games on/off wishlist.
+* Filter by title, rating, and release dates.
+* Detailed video game information.
+* Video game screenshots and gameplay videos.
+* Popular games section.
+* New releases section.
 
 ## Future implementations
 
+* Personal and customizable user profile (From original).
+* Add and delete games on/off wishlist (From original).
+* Price comparison section per game profile (From original).
+* Coming soon section.
 * Advance searches and filters (Search by genre, platform, developers).
 * Personalized landing page based off user's genre preference and platform.
 * Share and collaborate between users with personal profiles.
@@ -80,6 +86,7 @@ Log in with a preexisting demo account listed above to try out a personal profil
 * Game release watch list.
 * Game review section.
 * Relevant news in landing page and game profile page.
+* More transitioning animation.
 
 ## Author
 

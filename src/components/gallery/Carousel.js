@@ -114,15 +114,28 @@ class Carousel extends PureComponent {
                                         {item.name}
                                         </Link>
                                         </Typography>
-                                        <Typography variant="body1" style={styles.itemDescriptionText}>
-                                            {item.summary ? item.summary.slice(0, 250) : 'None'} ... 
-                                            <Link
-                                                to={`/game-profile?name=${item.name}&id=${item.id}`}
-                                                style={{ textDecoration: 'none', color: '#f9ca24', fontWeight: 600 }}
-                                            >
-                                                Read more
-                                            </Link>
-                                        </Typography>
+                                        <Hidden smDown>
+                                            <Typography variant="body1" style={styles.itemDescriptionText}>
+                                                {item.summary ? item.summary.slice(0, 250) : 'None'} ... 
+                                                <Link
+                                                    to={`/game-profile?name=${item.name}&id=${item.id}`}
+                                                    style={{ textDecoration: 'none', color: '#f9ca24', fontWeight: 600 }}
+                                                >
+                                                    Read more
+                                                </Link>
+                                            </Typography>
+                                        </Hidden>
+                                        <Hidden smUp>
+                                            <Typography variant="body1" style={styles.itemDescriptionText}>
+                                                {item.summary ? item.summary.slice(0, 80) : 'None'} ... 
+                                                <Link
+                                                    to={`/game-profile?name=${item.name}&id=${item.id}`}
+                                                    style={{ textDecoration: 'none', color: '#f9ca24', fontWeight: 600 }}
+                                                >
+                                                    Read more
+                                                </Link>
+                                            </Typography>
+                                        </Hidden>
                                         <p>
                                             <b>Genre: </b>
                                             {item.genres
