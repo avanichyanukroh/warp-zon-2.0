@@ -17,8 +17,8 @@ import GridList from '../components/gallery/GridList';
 class Home extends Component {
 
     componentDidMount() {
-        // this.props.dispatch(getPopularGames());
-        // this.props.dispatch(getNewReleases());
+        this.props.dispatch(getPopularGames());
+        this.props.dispatch(getNewReleases());
     }
 
     render() {

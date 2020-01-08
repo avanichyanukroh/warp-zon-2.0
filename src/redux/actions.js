@@ -173,7 +173,6 @@ export const getNewReleases = () => dispatch => {
 }
 
 export const getComingSoons = () => dispatch => {
-    console.log(Date.now());
     axios({
         url: PROXY_URL + 'https://api-v3.igdb.com/release_dates',
         method: 'POST',

@@ -9,11 +9,7 @@ import {
 } from './actions';
 
 const initialState = {
-    // popularGames: [],
-    // gameProfile: [],
-    // newReleases: [],
-    // comingSoons: [],
-    // gameSearchResults: []
+
 }
 
 export const reducers = (state = initialState, action) => {

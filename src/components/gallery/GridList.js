@@ -10,14 +10,14 @@ import GridListItem from './GridListItem';
 export class GridList extends Component {
     
     componentDidMount() {
-        // this.props.dispatch(getComingSoons());
-        // this.props.dispatch(getHighRatings());
-        // this.props.dispatch(getMostAnticipated());
+        this.props.dispatch(getComingSoons());
+        this.props.dispatch(getHighRatings());
+        this.props.dispatch(getMostAnticipated());
     }
 
     render() {
         const { comingSoons, highRatings, mostAnticipated } = this.props;
-        console.log(comingSoons);
+        
         return (
             <Grid container spacing={16}>
                 
