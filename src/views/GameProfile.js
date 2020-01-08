@@ -120,7 +120,13 @@ const styles = {
         objectFit: 'cover',
         width: '100%',
         height: '100%'
-    }
+    },
+    backgroundImageAlt: {
+        objectFit: 'cover',
+        width: 'auto',
+        height: '350px',
+        background: 'linear-gradient(to bottom, #c31432, #240b36)'
+    },
 }
 
 const ageRatingURL = {
@@ -182,11 +188,15 @@ class GameProfile extends Component {
                             <Grid item xs={12} sm={3} md={3}>
                                 <div style={styles.gridWrapperCover}>
                                     <div style={styles.gameCoverContainer}>
-                                        <img
-                                            src={`https://images.igdb.com/igdb/image/upload/t_cover_big/${gameProfile[0].cover.image_id}.jpg`}
-                                            alt="game cover"
-                                            style={styles.gameCoverImage}
-                                        />
+                                            {
+                                                gameProfile[0].cover
+                                                ? <img
+                                                    src={`https://images.igdb.com/igdb/image/upload/t_cover_big/${gameProfile[0].cover.image_id}.jpeg`}
+                                                    alt='game screenshot'
+                                                    style={styles.gameCoverImage}
+                                                />
+                                                : <div style={styles.backgroundImageAlt} />
+                                            }
                                     </div>
                                     <div style={styles.gameCoverDescriptionContainer}>
                                         <Typography variant="body1" style={styles.itemRatingValue}>
@@ -234,7 +244,10 @@ class GameProfile extends Component {
                                         </div>
                                         <div style={styles.resultText}>
                                             <b>Release Date: </b>
-                                            <span>{moment.unix(gameProfile[0].first_release_date).format('MMMM Do YYYY')}</span>
+                                            <span>{gameProfile[0].first_release_date ? 
+                                                moment.unix(gameProfile[0].first_release_date).utc().format('MMMM Do YYYY')
+                                                : 'TBD'
+                                            }</span>
                                         </div>
                                     </div>
                                 </div>
@@ -270,9 +283,12 @@ class GameProfile extends Component {
                             <Grid item xs={12} sm={8} md={8}>
                             <div style={styles.gridWrapper}>
                                 <div style={styles.resultText}>
-                                    {gameProfile[0].summary.split('\n').map((item, key) => {
-                                        return <span key={key}>{item}<br/></span>
-                                    })}
+                                    {gameProfile[0].summary
+                                        ? gameProfile[0].summary.split('\n').map((item, key) => {
+                                            return <span key={key}>{item}<br/></span>
+                                        })
+                                        : 'Summary Unavailable'
+                                }
                                 </div>
                                 <div style={{ marginBottom: '25px' }} />
                                 <SectionHeader title="Media" />
@@ -338,7 +354,12 @@ class GameProfile extends Component {
                                         <Grid item xs={6} sm={6} md={6}>
                                             {gameProfile[0].release_dates.map((releaseDate, index) => (
                                                 <div style={styles.resultText} key={index}>
-                                                    <span>{moment.unix(releaseDate.date).format('MMM Do YYYY')} - {releaseDate.platform.abbreviation}</span>
+                                                    <span>
+                                                        {releaseDate.date ?
+                                                            moment.unix(releaseDate.date).utc().format('MMM Do YYYY')
+                                                            : 'TBD'
+                                                        } - {releaseDate.platform.abbreviation}
+                                                    </span>
                                                 </div>
                                             ))}
                                         </Grid>

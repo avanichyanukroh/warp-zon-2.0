@@ -26,6 +26,18 @@ export const loadComingSoons = (comingSoons) => ({
 	comingSoons
 });
 
+export const LOAD_HIGH_RATINGS = 'LOAD_HIGH_RATINGS';
+export const loadHighRatings = (highRatings) => ({
+	type: LOAD_HIGH_RATINGS,
+	highRatings
+});
+
+export const LOAD_MOST_ANTICIPATED = 'LOAD_MOST_ANTICIPATED';
+export const loadMostAnticipated = (mostAnticipated) => ({
+	type: LOAD_MOST_ANTICIPATED,
+	mostAnticipated
+});
+
 export const LOAD_GAME_SEARCH_RESULTS = 'LOAD_GAME_SEARCH_RESULTS';
 export const loadGameSearchResults = (gameSearchResults) => ({
 	type: LOAD_GAME_SEARCH_RESULTS,
@@ -161,6 +173,7 @@ export const getNewReleases = () => dispatch => {
 }
 
 export const getComingSoons = () => dispatch => {
+    console.log(Date.now());
     axios({
         url: PROXY_URL + 'https://api-v3.igdb.com/release_dates',
         method: 'POST',
@@ -174,19 +187,88 @@ export const getComingSoons = () => dispatch => {
             where
                 date > ${Date.now()};
             sort
-                date asc;`
+                date desc;`
     })
     .then(res => {
         let comingSoonIds = [];
 
         res.data.forEach(result => {
-            comingSoonIds.push(result.id);
+            comingSoonIds.push(result.game);
         });
 
-        return getGameProfiles(comingSoonIds);
+        return dispatch(getGameProfiles(comingSoonIds));
     })
     .then(comingSoons => {
         dispatch(loadComingSoons(comingSoons));
+    })
+    .catch(err => {
+        console.error(err);
+    });
+}
+
+export const getHighRatings = () => dispatch => {
+    let lastYear = new Date();
+    lastYear.setFullYear(lastYear.getFullYear() - 1);
+    const lastYearUnix = Math.round(lastYear.getTime() / 1000);
+
+    axios({
+        url: PROXY_URL + 'https://api-v3.igdb.com/games',
+        method: 'POST',
+        headers: {
+            'Accept': 'application/json',
+            'user-key': 'e3a95dd164fdc12b9eb483624161e322'
+        },
+        data: `
+            fields
+                *,
+                rating,
+                total_rating_count,
+                screenshots.*,
+                cover.image_id,
+                release_dates.*;
+            where
+                first_release_date > ${lastYearUnix};
+            sort
+                rating desc;
+            limit
+                10;
+            `
+    })
+    .then(res => {
+        dispatch(loadHighRatings(res.data));
+    })
+    .catch(err => {
+        console.error(err);
+    });
+}
+
+export const getMostAnticipated = () => dispatch => {
+    axios({
+        url: PROXY_URL + 'https://api-v3.igdb.com/games',
+        method: 'POST',
+        headers: {
+            'Accept': 'application/json',
+            'user-key': 'e3a95dd164fdc12b9eb483624161e322'
+        },
+        data: `
+            fields
+                *,
+                screenshots.*,
+                cover.image_id,
+                genres.name,
+                platforms.abbreviation,
+                release_dates.*,
+                videos.video_id,
+                involved_companies.company.name,
+                hypes;
+            sort
+                hypes desc;
+            limit
+                10;
+            `
+    })
+    .then(res => {
+        dispatch(loadMostAnticipated(res.data));
     })
     .catch(err => {
         console.error(err);

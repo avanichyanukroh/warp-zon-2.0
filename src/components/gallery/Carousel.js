@@ -9,6 +9,7 @@ import { Link } from 'react-router-dom';
 
 import 'react-responsive-carousel/lib/styles/carousel.min.css';
 import './Carousel.css';
+import BoxContainer from '../layout/BoxContainer';
 
 
 const styles = {
@@ -68,127 +69,150 @@ const styles = {
         padding: '2px 6px',
         marginRight: '5px',
         fontSize: '14px'
-    }
+    },
+    backgroundImage: {
+        objectFit: 'cover',
+        width: '100%',
+        height: '100%'
+    },
+    backgroundImageAlt: {
+        objectFit: 'cover',
+        width: '100%',
+        height: '100%',
+        background: 'linear-gradient(to bottom, #c31432, #240b36)'
+    },
 }
 class Carousel extends PureComponent {
 	render() {
         const { items } = this.props;
 
         return (
-			<ResponsiveCarousel
-				showThumbs={false}
-				showStatus={false}
-                infiniteLoop
-				className="presentation-mode"
-			>
-                {items.map((item, index) => (
-                    <div style={styles.slideContainer} key={index}>
-                        <div style={styles.effectOverlay} />
-                        {
-                            item.screenshots || item.cover
-                            ? <img
-                                src={`https://images.igdb.com/igdb/image/upload/t_screenshot_med_2x/${item.screenshots ? item.screenshots[0].image_id : item.cover.image_id}.jpeg`}
-                                alt='game screenshot'
-                                style={styles.backgroundImage}
-                            />
-                            : <div
-                            style={{
-                                background: 'linear-gradient(to right top, #c0392b, #8e44ad)',
-                                width: '100%',
-                                height: 'auto',
-                                borderRadius: '4px',
-                                boxShadow: '1px 1px 2px lightgray'
-                            }}
-                        />
-                        }
+            <BoxContainer>
+                <ResponsiveCarousel
+                    showThumbs={false}
+                    showStatus={false}
+                    infiniteLoop
+                    className="presentation-mode"
+                >
+                    {items.map((item, index) => (
+                        <div style={styles.slideContainer} key={index}>
+                            <div style={styles.effectOverlay} />
+                            {item.screenshots || item.cover
+                                ? <img
+                                    src={`https://images.igdb.com/igdb/image/upload/t_screenshot_med_2x/${item.screenshots ? item.screenshots[0].image_id : item.cover.image_id}.jpeg`}
+                                    alt='game screenshot'
+                                    style={styles.backgroundImage}
+                                />
+                                : <div
+                                    style={{
+                                        background: 'linear-gradient(to right top, #c0392b, #8e44ad)',
+                                        width: '100%',
+                                        height: 'auto',
+                                        borderRadius: '4px',
+                                        boxShadow: '1px 1px 2px lightgray'
+                                    }}
+                                />
+                            }
 
-                        <div style={styles.contentContainer}>
-                            <Grid container spacing={16}>
-                                <Grid item xs={12} sm={8} md={8} style={{ textAlign: 'left' }}>
-                                    <div style={{height: '200px', paddingRight: '20px', color: 'white'}}>
-                                        <Typography variant="h4" gutterBottom style={styles.itemDescriptionText}>
-                                        <Link
-                                            to={`/game-profile?name=${item.name}&id=${item.id}`}
-                                            style={{ textDecoration: 'none', color: 'white' }}
-                                        >
-                                        {item.name}
-                                        </Link>
-                                        </Typography>
-                                        <Hidden smDown>
-                                            <Typography variant="body1" style={styles.itemDescriptionText}>
-                                                {item.summary ? item.summary.slice(0, 250) : 'None'} ... 
-                                                <Link
-                                                    to={`/game-profile?name=${item.name}&id=${item.id}`}
-                                                    style={{ textDecoration: 'none', color: '#f9ca24', fontWeight: 600 }}
-                                                >
-                                                    Read more
-                                                </Link>
-                                            </Typography>
-                                        </Hidden>
-                                        <Hidden smUp>
-                                            <Typography variant="body1" style={styles.itemDescriptionText}>
-                                                {item.summary ? item.summary.slice(0, 80) : 'None'} ... 
-                                                <Link
-                                                    to={`/game-profile?name=${item.name}&id=${item.id}`}
-                                                    style={{ textDecoration: 'none', color: '#f9ca24', fontWeight: 600 }}
-                                                >
-                                                    Read more
-                                                </Link>
-                                            </Typography>
-                                        </Hidden>
-                                        <p>
-                                            <b>Genre: </b>
-                                            {item.genres
-                                                ? item.genres.map((genre, index) => {
-                                                    if (index === 0) {
-                                                        return genre.name;
-                                                    }
-                                                    else {
-                                                        return `, ${genre.name}`;
-                                                    }
-                                                })
-                                                : 'Unavailable'}
-                                        </p>
-                                        <p>
-                                            <b>Platform: </b>
-                                            {item.platforms
-                                                ? item.platforms.map((platform, index) => (
-                                                    <span
-                                                        style={styles.platform}
-                                                        key={index}
-                                                    >
-                                                        {platform.abbreviation}
-                                                    </span>
-                                                ))
-                                                : 'Unavailable'}
-                                        </p>
-                                        <p>
-                                            <b>Release Date: </b>
-                                            {moment(item.release_dates.slice(-1).date).format('MMMM Do YYYY')}
-                                        </p>
-                                    </div>
-                                </Grid>
-                                <Hidden smDown>
-                                    <Grid item xs={12} sm={4} md={4} style={{ textAlign: 'left' }}>
-                                        <div style={styles.iFrameContainer}>
-                                            <iframe 
-                                                title="breath of the wild"
-                                                allowFullScreen="allowfullscreen"
-                                                src={`https://www.youtube.com/embed/${item.videos[0].video_id}`}
-                                                frameBorder="0"
-                                                autoFocus
-                                                style={styles.iFrame}
+                            <div style={styles.contentContainer}>
+                                <Grid container spacing={16}>
+                                    <Grid item xs={12} sm={8} md={8} style={{ textAlign: 'left' }}>
+                                        <div style={{height: '200px', paddingRight: '20px', color: 'white'}}>
+                                            <Typography variant="h4" gutterBottom style={styles.itemDescriptionText}>
+                                            <Link
+                                                to={`/game-profile?name=${item.name}&id=${item.id}`}
+                                                style={{ textDecoration: 'none', color: 'white' }}
                                             >
-                                            </iframe>
+                                            {item.name}
+                                            </Link>
+                                            </Typography>
+                                            <Hidden smDown>
+                                                <Typography variant="body1" style={styles.itemDescriptionText}>
+                                                    {item.summary ? item.summary.slice(0, 250) : 'None'} ... 
+                                                    <Link
+                                                        to={`/game-profile?name=${item.name}&id=${item.id}`}
+                                                        style={{ textDecoration: 'none', color: '#f9ca24', fontWeight: 600 }}
+                                                    >
+                                                        Read more
+                                                    </Link>
+                                                </Typography>
+                                            </Hidden>
+                                            <Hidden smUp>
+                                                <Typography variant="body1" style={styles.itemDescriptionText}>
+                                                    {item.summary ? item.summary.slice(0, 80) : 'None'} ... 
+                                                    <Link
+                                                        to={`/game-profile?name=${item.name}&id=${item.id}`}
+                                                        style={{ textDecoration: 'none', color: '#f9ca24', fontWeight: 600 }}
+                                                    >
+                                                        Read more
+                                                    </Link>
+                                                </Typography>
+                                            </Hidden>
+                                            <p>
+                                                <b>Genre: </b>
+                                                {item.genres
+                                                    ? item.genres.map((genre, index) => {
+                                                        if (index === 0) {
+                                                            return genre.name;
+                                                        }
+                                                        else {
+                                                            return `, ${genre.name}`;
+                                                        }
+                                                    })
+                                                    : 'Unavailable'}
+                                            </p>
+                                            <p>
+                                                <b>Platform: </b>
+                                                {item.platforms
+                                                    ? item.platforms.map((platform, index) => (
+                                                        <span
+                                                            style={styles.platform}
+                                                            key={index}
+                                                        >
+                                                            {platform.abbreviation}
+                                                        </span>
+                                                    ))
+                                                    : 'Unavailable'}
+                                            </p>
+                                            <p>
+                                                <b>Release Date: </b>
+                                                {moment(item.release_dates.slice(-1).date).format('MMMM Do YYYY')}
+                                            </p>
                                         </div>
                                     </Grid>
-                                </Hidden>
-                            </Grid>
+                                    <Hidden smDown>
+                                        <Grid item xs={12} sm={4} md={4} style={{ textAlign: 'left' }}>
+                                            <div style={styles.iFrameContainer}>
+                                                {(item.videos && item.videos.length > 0)
+                                                    ? <iframe 
+                                                        title="breath of the wild"
+                                                        allowFullScreen="allowfullscreen"
+                                                        src={`https://www.youtube.com/embed/${item.videos[0].video_id}`}
+                                                        frameBorder="0"
+                                                        autoFocus
+                                                        style={styles.iFrame}
+                                                    >
+                                                    </iframe>
+                                                    :
+                                                    item.screenshots
+                                                        ? <img
+                                                            src={`https://images.igdb.com/igdb/image/upload/t_screenshot_med_2x/${item.screenshots[1] ? item.screenshots[1].image_id : item.screenshots[0].image_id}.jpeg`}
+                                                            alt='game screenshot'
+                                                            style={styles.backgroundImage}
+                                                        />
+                                                        : <div style={styles.backgroundImageAlt} />
+                                                    
+                                                }
+                                                
+                                            </div>
+                                        </Grid>
+                                    </Hidden>
+                                </Grid>
+                            </div>
                         </div>
-                    </div>
-                ))}
-
-			</ResponsiveCarousel>
+                    ))}
+                </ResponsiveCarousel>
+            </BoxContainer>
 		);
 	}
 }

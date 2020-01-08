@@ -36,7 +36,10 @@ const styles = theme => ({
         boxShadow: theme.shadows[5],
         // padding: theme.spacing(4),
         outline: 'none',
-      },
+    },
+    toolBar: {
+        border: '1px solid green'
+    },
 	search: {
 		position: 'relative',
 		borderRadius: theme.shape.borderRadius,
@@ -189,8 +192,9 @@ class Navbar extends React.Component {
 		return (
 			<div className={classes.root}>
                 {this.handleRedirectToSearchResults()}
-				<AppBar position="fixed" style={{background: '#2C3A47'}}>
-					<Toolbar variant="dense">
+				<AppBar position="static" style={{background: '#2C3A47'}}>
+                    <div style={{margin: '0 auto 0', maxWidth: '1200px', width: '100%'}}>
+					<Toolbar variant="dense" className={styles.toolBar} disableGutters>
                         <Link to="/" style={{ textDecoration: 'none', color: 'white', marginTop: 'auto' }}>
                             <img
                                 src={navbarLogo}
@@ -198,6 +202,7 @@ class Navbar extends React.Component {
                                 style={{
                                     height: '30px',
                                     width: 'auto',
+                                    marginLeft: '4px',
                                     marginRight: '4px',
                                     position: 'relative',
                                     top: '-4px'
@@ -263,6 +268,7 @@ class Navbar extends React.Component {
                             </Typography>
                         </div>
                     </Modal>
+                    </div>
 				</AppBar>
 				{renderMenu}
 				{renderMobileMenu}

@@ -3,7 +3,9 @@ import {
     LOAD_GAME_PROFILE,
     LOAD_NEW_RELEASES,
     LOAD_COMING_SOONS,
-    LOAD_GAME_SEARCH_RESULTS
+    LOAD_GAME_SEARCH_RESULTS,
+    LOAD_HIGH_RATINGS,
+    LOAD_MOST_ANTICIPATED
 } from './actions';
 
 const initialState = {
@@ -33,6 +35,16 @@ export const reducers = (state = initialState, action) => {
     if (action.type === LOAD_COMING_SOONS) {
         return Object.assign({}, state, {
             comingSoons: action.comingSoons
+        });
+    }
+    if (action.type === LOAD_HIGH_RATINGS) {
+        return Object.assign({}, state, {
+            highRatings: action.highRatings
+        });
+    }
+    if (action.type === LOAD_MOST_ANTICIPATED) {
+        return Object.assign({}, state, {
+            mostAnticipated: action.mostAnticipated
         });
     }
     if (action.type === LOAD_GAME_SEARCH_RESULTS) {

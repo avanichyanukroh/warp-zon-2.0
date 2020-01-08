@@ -1,22 +1,22 @@
 .carousel .control-prev.control-arrow:before {
     transform: rotate(135deg);
     -webkit-transform: rotate(135deg);
-    margin-left: 25px;
+    margin-left: 4px;
   }
   
   .carousel .control-next.control-arrow:before {
     transform: rotate(-45deg);
     -webkit-transform: rotate(-45deg);
-    margin-right: 25px;
+    margin-right: 4px;
   }
   
   .carousel.carousel-slider .control-arrow:before {
     display: inline-block;
     border-top: none;
-    border-right: 5px solid #fff;
-    border-bottom: 5px solid #fff;
+    border-right: 4px solid #fff;
+    border-bottom: 4px solid #fff;
     border-left: none;
-    padding: 8px;
+    padding: 4px;
     content: '';
   }
 

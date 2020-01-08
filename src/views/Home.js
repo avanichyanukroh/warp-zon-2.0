@@ -12,12 +12,13 @@ import ParallaxHero from '../components/common/ParallaxHero';
 import { ClipLoader } from 'react-spinners';
 
 import { getPopularGames, getNewReleases } from '../redux/actions';
+import GridList from '../components/gallery/GridList';
 
 class Home extends Component {
 
     componentDidMount() {
-        this.props.dispatch(getPopularGames());
-        this.props.dispatch(getNewReleases());
+        // this.props.dispatch(getPopularGames());
+        // this.props.dispatch(getNewReleases());
     }
 
     render() {
@@ -64,6 +65,9 @@ class Home extends Component {
                     <SectionHeader title="New Releases" />
                     <Carousel items={newReleases} />
                     <Spacer />
+                    <BoxContainer>
+                        <GridList />
+                    </BoxContainer>
                 </div>
             );
         }
