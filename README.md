@@ -1,5 +1,7 @@
 # Warp Zone 2.0
 
+Currently no longer paying for API service that provides video game data.
+
 An application for users to research their next video game of interest along with their current sale prices.  
 
 This is a ongoing rebuild of the original Warp Zone site. Checkout what features will be coming out next at [Future Implementations](#future-implementations).  
